@@ -13,7 +13,7 @@ class DistillationRunnerCfg(RslRlDistillationRunnerCfg):
     num_steps_per_env = 60
     max_iterations = 150
     save_interval = 50
-    experiment_name = "cartpole_direct"
+    experiment_name = "unitreego1_ft_v0"
     obs_groups = {"student": ["policy"], "teacher": ["policy"]}
     student = RslRlMLPModelCfg(
         hidden_dims=[32, 32],
