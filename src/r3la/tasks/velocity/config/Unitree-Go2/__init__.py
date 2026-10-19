@@ -13,11 +13,11 @@ from . import agents
 
 
 gym.register(
-    id="R3la-Velocity-FT-UnitreeGo1-v0",
+    id="R3la-Velocity-FT-UnitreeGo2-v0",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
-        "env_cfg_entry_point": f"{__name__}.env_cfg:VelocityEnvCfg",
+        "env_cfg_entry_point": f"{__name__}.env_cfg:LocomotionVelocityRoughEnvCfg",
         "default_agent": "rsl_rl",
         "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:PPORunnerCfg",
         "rsl_rl_distillation_cfg_entry_point": f"{agents.__name__}.rsl_rl_distillation_cfg:DistillationRunnerCfg",
