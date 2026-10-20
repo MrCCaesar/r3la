@@ -5,9 +5,14 @@
 
 __all__ = [
     "joint_pos_target_l2",
+    "MotorFailure",
+    "motor_strengths",
 ]
 
 # Forward stable MDP terms lazily, then override with environment-specific terms below.
 from isaaclab.envs.mdp import *  # noqa: F401, F403
 
-from .rewards import joint_pos_target_l2
+from isaaclab_tasks.core.velocity.mdp import *  # noqa: F401, F403
+
+from .evnets import MotorFailure, motor_strengths
+from .rewards import *
