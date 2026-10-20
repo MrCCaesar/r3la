@@ -10,6 +10,7 @@
 6. Before completing a task, review files created during the task and remove temporary diagnostic artifacts such as *.log, *.tmp, captured stdout/stderr, debug dumps, and intermediate inspection files.
 7. Never delete files that existed before the task unless explicitly requested by the user.
 8. Never delete experiment logs, training outputs, checkpoints, datasets, benchmark results, or other project artifacts merely because their filename matches a temporary-file pattern.
+9. Files under `.scratch/` that belong to the configured issue tracker or active feature specifications are project workflow artifacts, not temporary diagnostic files, and must not be deleted by cleanup rules.
 
 ## Backend-Specific Imports
 
@@ -38,14 +39,15 @@ at module scope in shared code.
 
 For non-trivial changes:
 
-1. Read REQUIREMENTS.md.
-2. Read TESTS.md.
-3. Establish baseline before changing behavior-sensitive code.
-4. Perform impact analysis.
-5. Implement the smallest necessary change.
-6. Run existing tests and new tests.
-7. Run regression and benchmark checks.
-8. Record evidence in VERIFICATION.md.
+1. Read the relevant feature spec and issue under `.scratch/`, if any.
+4. Read relevant glossary entries and ADRs.
+5. Establish a baseline before changing behavior-sensitive code.
+6. Perform impact analysis.
+7. Implement the smallest necessary change.
+8. Run applicable tests and regression checks.
+9. Record evidence in `VERIFICATION.md`.
+
+Feature specs and issues may refine repository-wide requirements but must not silently contradict existing ADRs.
 
 ## Test integrity
 
@@ -66,3 +68,29 @@ Do not claim completion unless:
 - regression checks pass;
 - verification evidence exists;
 - remaining unverified items are reported explicitly.
+
+## Resource-Aware Testing
+
+- Before running resource-intensive tests, inspect the host's available CPU, RAM, and GPU memory.
+- Scale test parameters to the available resources; never assume the machine can run the maximum configuration in `TESTS.md`.
+- Keep total test memory usage well below available memory and leave sufficient headroom for the OS and simulator.
+- For IsaacLab tests, start with the smallest practical workload (for example, `num_envs=1` or `2`) and increase only when necessary.
+- Prefer sequential or reduced-size tests over running multiple heavy tests concurrently.
+- Do not run stress, large-scale, or high-parallelism tests unless explicitly requested.
+- If estimated resource usage may exceed safe limits, reduce the test size instead of attempting the test.
+- Resource limits override test-scale examples in `REQUIREMENTS.md` and `TESTS.md`; preserve test intent while reducing workload.
+- For IsaacLab/Isaac Sim tests, default to num_envs <= 2 unless a larger value is required to validate the feature. Check available system RAM and GPU VRAM before increasing parallel environments, and stop scaling up when free memory becomes limited.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs use local Markdown under `.scratch/<feature>/`. Before reading or publishing tickets, read `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Use the five default triage roles as issue status strings. Before triaging, read `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Use a single-context layout: root `GLOSSARY.md` and `docs/adr/`. Before exploring the codebase, read `docs/agents/domain.md`.

@@ -6,6 +6,9 @@ R3LA is a repository for reproducing and evaluating reinforcement learning algor
 
 Different algorithms are maintained in separate branches to keep implementations isolated and easy to compare.
 
+branch quad_ft is used to reproduct paper:
+Luo, Zeren et al. “FT-Net: Learning Failure Recovery and Fault-Tolerant Locomotion for Quadruped Robots.” IEEE Robotics and Automation Letters 8 (2023): 8414-8421.
+
 ## Repository Structure
 
 A typical project structure is:

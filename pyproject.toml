@@ -40,6 +40,7 @@ environments = [
     "sys_platform == 'win32' and platform_machine == 'AMD64'",
 ]
 override-dependencies = [
+    "rsl-rl-lib==5.5.1",
     "numpy>=2",
     "mujoco~=3.11.0",
     "mujoco-warp~=3.11.0",
@@ -52,6 +53,7 @@ override-dependencies = [
 ]
 
 [tool.uv.sources]
+"rsl-rl-lib" = { path = "src/rsl_rl", editable = true }
 "isaaclab" = { path = "../../IsaacLab/source/isaaclab", editable = true }
 "isaaclab-assets" = { path = "../../IsaacLab/source/isaaclab_assets", editable = true }
 "isaaclab-contrib" = { path = "../../IsaacLab/source/isaaclab_contrib", editable = true }
