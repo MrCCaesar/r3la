@@ -3,4 +3,4 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Isaac Lab environments for r3la."""
+"""Isaac Lab environments for the r3la project."""

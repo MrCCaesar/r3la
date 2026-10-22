@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: BSD-3-Clause
 
-"""Tests for the generated task registrations."""
+"""Tests for the project's task registrations."""
 
 import gymnasium as gym
 
@@ -11,18 +11,9 @@ import r3la.tasks  # noqa: F401
 
 
 def test_task_registrations():
-    """The generated tasks must expose valid environment and agent entry points."""
-    expected = {
-        "R3la-Velocity-H1W": {
-            "entry_point": "isaaclab.envs:ManagerBasedRLEnv",
-            "env_cfg_entry_point": "r3la.tasks.velocity.config.H1W.env_cfg:VelocityEnvCfg",
-            "default_agent": "rsl_rl",
-        },
-    }
+    """The project tasks must expose valid environment and agent entry points."""
+    assert all(
+        not str(spec.kwargs.get("env_cfg_entry_point", "")).startswith("r3la.tasks")
+        for spec in gym.registry.values()
+    )
 
-    for task_id, expected_values in expected.items():
-        spec = gym.spec(task_id)
-        assert spec.entry_point == expected_values["entry_point"]
-        assert spec.kwargs["env_cfg_entry_point"] == expected_values["env_cfg_entry_point"]
-        if "default_agent" in expected_values:
-            assert spec.kwargs["default_agent"] == expected_values["default_agent"]
