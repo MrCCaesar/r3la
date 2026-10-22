@@ -13,22 +13,23 @@ class DistillationRunnerCfg(RslRlDistillationRunnerCfg):
     num_steps_per_env = 60
     max_iterations = 150
     save_interval = 50
-    experiment_name = "unitreego1_ft_v0"
-    obs_groups = {"student": ["policy"], "teacher": ["policy"]}
+    experiment_name = "unitreego2_teacher_student"
+    load_run = ".*_unitreego2_teacher"
+    obs_groups = {"student": ["proprio"], "teacher": ["policy"]}
     student = RslRlMLPModelCfg(
-        hidden_dims=[32, 32],
+        hidden_dims=[512, 256, 128],
         activation="elu",
         obs_normalization=False,
         distribution_cfg=RslRlMLPModelCfg.GaussianDistributionCfg(init_std=1.0),
     )
     teacher = RslRlMLPModelCfg(
-        hidden_dims=[32, 32],
+        hidden_dims=[256, 256, 128],
         activation="elu",
         obs_normalization=False,
-        distribution_cfg=RslRlMLPModelCfg.GaussianDistributionCfg(init_std=0.0),
+        distribution_cfg=RslRlMLPModelCfg.GaussianDistributionCfg(init_std=1.0),
     )
     algorithm = RslRlDistillationAlgorithmCfg(
-        num_learning_epochs=2,
+        num_learning_epochs=4,
         learning_rate=1.0e-3,
         gradient_length=15,
     )
