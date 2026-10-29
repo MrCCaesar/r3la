@@ -1,0 +1,23 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________________________ test_task_registrations ____________________________
+
+    def test_task_registrations():
+        """The project tasks must expose valid environment and agent entry points."""
+>       assert all(
+            not str(spec.kwargs.get("env_cfg_entry_point", "")).startswith("r3la.tasks")
+            for spec in gym.registry.values()
+        )
+E       assert False
+E        +  where False = all(<generator object test_task_registrations.<locals>.<genexpr> at 0x7e8fb3afb4c0>)
+
+tests/test_registration.py:15: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/torch/jit/_script.py:1488: 35 warnings
+  /home/sevnce-mr/r3la/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1488: DeprecationWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_registration.py::test_task_registrations - assert False
+1 failed, 35 warnings in 1.48s
