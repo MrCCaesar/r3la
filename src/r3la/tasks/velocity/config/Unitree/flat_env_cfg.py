@@ -7,11 +7,11 @@
 
 from isaaclab.utils import configclass
 
-from .rough_env_cfg import UnitreeGo2RoughEnvCfg
+from .rough_env_cfg import UnitreeGo2ParkourEnvCfg
 
 
 @configclass
-class UnitreeGo2FlatEnvCfg(UnitreeGo2RoughEnvCfg):
+class UnitreeGo2FlatEnvCfg(UnitreeGo2ParkourEnvCfg):
     """Configuration for the Unitree Go2 velocity-tracking environment on flat terrain."""
 
     def __post_init__(self):

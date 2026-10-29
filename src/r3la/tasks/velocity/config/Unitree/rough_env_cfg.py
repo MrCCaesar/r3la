@@ -11,15 +11,40 @@ from isaaclab.utils import configclass, replace
 
 from isaaclab_assets.robots.unitree import UNITREE_GO2_CFG
 
+import isaaclab.sim as sim_utils
 import isaaclab_tasks.core.velocity.mdp as mdp
-from isaaclab_tasks.core.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg, ObservationsCfg, RewardsCfg
+from isaaclab_tasks.core.velocity.velocity_env_cfg import LocomotionVelocityRoughEnvCfg, ObservationsCfg, RewardsCfg, MySceneCfg
 from isaaclab.managers import ObservationGroupCfg as ObsGroup
 from isaaclab.managers import ObservationTermCfg as ObsTerm
 from isaaclab.utils.noise import UniformNoiseCfg as Unoise
+from isaaclab.terrains import TerrainImporterCfg
+from r3la.labs.terrains import PARKOUR_TERRAINS_CFG
+from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR, ISAACLAB_NUCLEUS_DIR
 
 # UNITREE_GO2_CFG.init_state.pos is (0, 0, 0.4) -- the asset's own authored standing height.
 _GO2_STANDING_HEIGHT = 0.4
 
+@configclass
+class UnitreeGo2ParkourScene(MySceneCfg):
+    terrain = TerrainImporterCfg(
+        prim_path="/World/ground",
+        terrain_type="generator",
+        terrain_generator=PARKOUR_TERRAINS_CFG,
+        max_init_terrain_level=5,
+        collision_group=-1,
+        physics_material=sim_utils.PhysxRigidBodyMaterialCfg(
+            friction_combine_mode="multiply",
+            restitution_combine_mode="multiply",
+            static_friction=1.0,
+            dynamic_friction=1.0,
+        ),
+        visual_material=sim_utils.MdlFileCfg(
+            mdl_path=f"{ISAACLAB_NUCLEUS_DIR}/Materials/TilesMarbleSpiderWhiteBrickBondHoned/TilesMarbleSpiderWhiteBrickBondHoned.mdl",
+            project_uvw=True,
+            texture_scale=(0.25, 0.25),
+        ),
+        debug_vis=False,
+    )
 
 @configclass
 class UnitreeGo2Rewards(RewardsCfg):
@@ -64,9 +89,10 @@ class UnitreeGo2ObservationsCfg(ObservationsCfg):
 
 
 @configclass
-class UnitreeGo2RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
+class UnitreeGo2ParkourEnvCfg(LocomotionVelocityRoughEnvCfg):
     """Configuration for the Unitree Go2 velocity-tracking environment on rough terrain."""
 
+    scene: UnitreeGo2ParkourScene = UnitreeGo2ParkourScene(num_envs=4096, env_spacing=2.5)
     rewards: UnitreeGo2Rewards = UnitreeGo2Rewards()
     observations: UnitreeGo2ObservationsCfg = UnitreeGo2ObservationsCfg()
 
@@ -104,3 +130,4 @@ class UnitreeGo2RoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.rewards.action_rate_l2.weight = -0.005
         # terminations
         self.terminations.base_contact.params["sensor_cfg"].body_names = "base"
+
