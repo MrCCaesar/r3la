@@ -17,17 +17,17 @@ gym.register(
     kwargs={
         "env_cfg_entry_point": f"{__name__}.flat_env_cfg:UnitreeGo2FlatEnvCfg",
         "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:UnitreeGo2FlatPPORunnerCfg",
-        "default_agent": "rsl_rl"
+        "default_agent": "rsl_rl",
     },
 )
 
 gym.register(
-    id="R3la-Baseline-Rough-UnitreeGo2",
+    id="R3la-SWAP-Parkour-UnitreeGo2",
     entry_point="isaaclab.envs:ManagerBasedRLEnv",
     disable_env_checker=True,
     kwargs={
-        "env_cfg_entry_point": f"{__name__}.rough_env_cfg:UnitreeGo2ParkourEnvCfg",
+        "env_cfg_entry_point": f"{__name__}.parkour_env_cfg:UnitreeGo2ParkourEnvCfg",
         "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:UnitreeGo2SWAPPPORunnerCfg",
-        "default_agent": "rsl_rl"
+        "default_agent": "rsl_rl",
     },
 )

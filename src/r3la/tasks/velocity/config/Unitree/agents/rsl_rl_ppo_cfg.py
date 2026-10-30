@@ -14,7 +14,7 @@ class UnitreeGo2SWAPPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     max_iterations = 1500
     save_interval = 50
     experiment_name = "unitree_go2_rough"
-    obs_groups = {"actor": ["proprio"], "critic": ["policy"]}
+    obs_groups = {"actor": ["proprio", "target"], "critic": ["policy"]}
     actor = RslRlMLPModelCfg(
         hidden_dims=[512, 256, 128],
         activation="elu",
@@ -43,7 +43,7 @@ class UnitreeGo2SWAPPPORunnerCfg(RslRlOnPolicyRunnerCfg):
 
 
 @configclass
-class UnitreeGo2FlatPPORunnerCfg(UnitreeGo2RoughPPORunnerCfg):
+class UnitreeGo2FlatPPORunnerCfg(UnitreeGo2SWAPPPORunnerCfg):
     def __post_init__(self):
         super().__post_init__()
 
