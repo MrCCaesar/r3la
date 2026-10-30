@@ -61,8 +61,7 @@ def actuator_gains(
         name: (group_joint_indices[name] if group_joint_indices is not None else actuator.joint_indices)
         for name, actuator in _gain_actuators.items()
     }
-    default_actuator_stiffness: dict[str, torch.Tensor] = {}
-    default_actuator_damping: dict[str, torch.Tensor] = {}
+
     from isaaclab.actuators.newton import read_group_parameter  # noqa: PLC0415
 
     for name, actuator in _gain_actuators.items():
@@ -77,7 +76,6 @@ def actuator_gains(
             # Explicit and Newton PD gains replace the zeroed solver gains in the defaults.
             default_joint_stiffness[:, joint_ids] = stiffness
             default_joint_damping[:, joint_ids] = damping
-        default_actuator_stiffness[name] = stiffness.clone()
-        default_actuator_damping[name] = damping.clone()
 
-    return torch.cat((default_actuator_stiffness[actuator_name][:, asset_cfg.joint_ids], default_actuator_damping[actuator_name][:, asset_cfg.joint_ids]), dim=-1)
+    return torch.cat((default_joint_stiffness[:, asset_cfg.joint_ids], default_joint_damping[:, asset_cfg.joint_ids]), dim=-1)
+    
