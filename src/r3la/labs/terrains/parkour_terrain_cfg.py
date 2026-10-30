@@ -36,9 +36,7 @@ PARKOUR_TERRAINS_CFG = TerrainGeneratorCfg(
             platform_width=2.0,
             double_box=True,
         ),
-        "flat": terrain_gen.MeshPlaneTerrainCfg(
-            proportion=0.1
-        ),
+        "flat": terrain_gen.MeshPlaneTerrainCfg(proportion=0.1),
         "random_rough": terrain_gen.HfRandomUniformTerrainCfg(
             proportion=0.1, noise_range=(0.02, 0.10), noise_step=0.02, border_width=0.25
         ),

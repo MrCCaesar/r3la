@@ -13,7 +13,5 @@ import r3la.tasks  # noqa: F401
 def test_task_registrations():
     """The project tasks must expose valid environment and agent entry points."""
     assert all(
-        not str(spec.kwargs.get("env_cfg_entry_point", "")).startswith("r3la.tasks")
-        for spec in gym.registry.values()
+        not str(spec.kwargs.get("env_cfg_entry_point", "")).startswith("r3la.tasks") for spec in gym.registry.values()
     )
-
