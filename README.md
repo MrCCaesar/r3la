@@ -22,10 +22,10 @@ r3-la/
 └── benchmarks/      # Performance and algorithm benchmarks
 ```
 
-## Dependicies
-Current Use Isaaclab 3.0.0EA version, which can be installed following [IsaacLab Installation](https://isaac-sim.github.io/IsaacLab/v3.0.0-EA/source/setup/installation/index.html#installation-method-uv)
+## Dependencies
+Current Use Isaaclab 3.0.0 version, which can be installed following [IsaacLab Installation](https://isaac-sim.github.io/IsaacLab/v3.0.0/source/isaaclab/installation.html)
 
-Adding custom learning library with [Adding your own learning library](https://isaac-sim.github.io/IsaacLab/v3.0.0-EA/source/how-to/add_own_library.html)
+Adding custom learning library with [Adding your own learning library](https://isaac-sim.github.io/IsaacLab/v3.0.0/source/developer-tools/template_generator.html)
 
 
 ## Branch Organization
