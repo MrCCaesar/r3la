@@ -7,6 +7,7 @@ import torch
 from isaaclab.envs import ManagerBasedRLEnv
 from isaaclab.managers import SceneEntityCfg
 from isaaclab.sensors import ContactSensor
+from .events import randomize_shared_material
 
 if TYPE_CHECKING:
     from isaaclab.assets import Articulation, RigidObject
@@ -33,8 +34,7 @@ def is_contact(
 
 def actuator_gains(
     env: ManagerBasedRLEnv,
-    asset_cfg: SceneEntityCfg,
-    actuator_name: str = "base_legs",
+    asset_cfg: SceneEntityCfg
 ) -> torch.Tensor:
     """Get randomized actuator Kp and Kd."""
     asset: RigidObject | Articulation = env.scene[asset_cfg.name]
@@ -78,4 +78,89 @@ def actuator_gains(
             default_joint_damping[:, joint_ids] = damping
 
     return torch.cat((default_joint_stiffness[:, asset_cfg.joint_ids], default_joint_damping[:, asset_cfg.joint_ids]), dim=-1)
-    
+
+
+def com_offset(
+    env: ManagerBasedRLEnv,
+    asset_cfg: SceneEntityCfg,
+    event_name: str = "base_com",
+) -> torch.Tensor:
+    """Return randomized base COM offset."""
+    asset: Articulation = env.scene[asset_cfg.name]
+    event = env.event_manager.get_term_cfg(event_name).func
+
+    current_com = asset.data.body_com_pose_b.torch[
+        :, asset_cfg.body_ids, :3
+    ]
+
+    if event.default_com is None:
+        return torch.zeros(
+            (env.num_envs, current_com.shape[1] * 3),
+            device=current_com.device,
+            dtype=current_com.dtype,
+        )
+
+    default_com = event.default_com[
+        :, asset_cfg.body_ids, :3
+    ]
+
+    return (current_com - default_com).reshape(env.num_envs, -1)
+
+def link_mass(
+        env: ManagerBasedRLEnv,
+        asset_cfg: SceneEntityCfg
+) -> torch.Tensor:
+    """Return randomized base mass."""
+    asset: Articulation = env.scene[asset_cfg.name]
+    return asset.data.body_mass[:, asset_cfg.body_ids].reshape(env.num_envs, -1)
+
+
+def _get_material_cache(
+    env: ManagerBasedRLEnv,
+    event_name: str,
+) -> torch.Tensor:
+    """Get cached material parameters, allowing shape probing."""
+
+    # ObservationManager is still being constructed.
+    # No material randomization is required for shape inference.
+    if getattr(env, "observation_manager", None) is None:
+        return torch.zeros(
+            (env.num_envs, 3),
+            device=env.device,
+            dtype=torch.float32,
+        )
+
+    event_cfg = env.event_manager.get_term_cfg(event_name)
+    event = event_cfg.func
+
+    if not isinstance(event, randomize_shared_material):
+        raise TypeError(
+            f"Event '{event_name}' must use randomize_shared_material"
+        )
+
+    values = event.material_values
+
+    # During actual execution, uninitialized material is an error.
+    if not torch.isfinite(values).all():
+        raise RuntimeError(
+            f"Material event '{event_name}' has not initialized "
+            "all environment material values."
+        )
+
+    return values
+
+
+def foot_friction(
+    env: ManagerBasedRLEnv,
+    event_name: str = "foot_material",
+) -> torch.Tensor:
+    """Static friction or Newton friction: (num_envs, 1)."""
+    return _get_material_cache(env, event_name)[:, 0:1]
+
+
+def foot_restitution(
+    env: ManagerBasedRLEnv,
+    event_name: str = "foot_material",
+) -> torch.Tensor:
+    """Restitution: (num_envs, 1)."""
+    return _get_material_cache(env, event_name)[:, 2:3]
