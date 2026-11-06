@@ -1,6 +1,8 @@
 # Issue #4 — status and decision history
 
-Current status: Verify authorized; latest checks passed, unified user acceptance pending. Ground-aligned side slope implemented (ADR-008 follow-up, cache revision 3): 159 tests passed; native slope check, compileall and diff check passed. User moved camera to (.35,0,.05) and confirmed self-occlusion resolved; former visibility blocker closed on user evidence. See verification.md.
+Current status: T13–T16 implementation and checks completed;169 tests passed,180 baseline differential cases passed, native sensor/dynamics checks passed. Production step 13.7804ms (-59.86%), observations 8.2540ms (-71.34%). Both review axes have no remaining findings. Implementation committed locally under implement skill; user acceptance pending. See performance-verification.md.
+
+Previous delivery status: Verify authorized; latest checks passed, unified user acceptance pending. Ground-aligned side slope implemented (ADR-008 follow-up, cache revision 3): 159 tests passed; native slope check, compileall and diff check passed. User moved camera to (.35,0,.05) and confirmed self-occlusion resolved; former visibility blocker closed on user evidence. See verification.md.
 Approval: user requested “进入plan阶段”, then “继续”.
 Explore/Research/Specify remain approved. T01–T12 cover accepted contracts.
 User explicitly invoked Implement previously and now explicitly approved Verify entry. Earlier stage-gating statements below are historical.

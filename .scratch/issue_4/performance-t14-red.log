@@ -1,0 +1,41 @@
+................F                                                        [100%]
+=================================== FAILURES ===================================
+__________ test_selectors_return_requested_fields_without_full_bundle __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x70dfabf585c0>
+
+    def test_selectors_return_requested_fields_without_full_bundle(monkeypatch):
+        import r3la.tasks.velocity.mdp.sensor_observations as terms
+
+        env = sample_env()
+        expected = terms.read_low_rate_targets(env)
+        def unexpected_bundle(*args):
+            raise AssertionError('selector assembled the complete bundle')
+        monkeypatch.setattr(terms, 'read_low_rate_targets', unexpected_bundle)
+        for key, value in expected.target.items():
+>           assert terms.low_rate_target(env, key) is value
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_parkour_sensors.py:149:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+src/r3la/tasks/velocity/mdp/sensor_observations.py:94: in low_rate_target
+    return read_low_rate_targets(env).target[key]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+args = (namespace(scene={'front_camera': <test_parkour_sensors.SampleSensor object at 0x70dfabf586b0>, 'body_height_scanner':...Sensor object at 0x70dfb81eb3b0>, 'rr_height_scanner': <test_parkour_sensors.SampleSensor object at 0x70dfb81c3cb0>}),)
+
+    def unexpected_bundle(*args):
+>       raise AssertionError('selector assembled the complete bundle')
+E       AssertionError: selector assembled the complete bundle
+
+tests/test_parkour_sensors.py:146: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/torch/jit/_script.py:1488: 35 warnings
+  /home/sevnce-mr/r3la/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1488: DeprecationWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_parkour_sensors.py::test_selectors_return_requested_fields_without_full_bundle
+1 failed, 16 passed, 35 warnings in 2.43s

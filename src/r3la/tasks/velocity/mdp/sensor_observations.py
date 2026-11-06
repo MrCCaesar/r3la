@@ -22,11 +22,14 @@ _LOW_RATE = (
     ("rh_height_scan", "rh_height_valid", "rr_height_scanner"),
 )
 
+_TARGET_INDEX = {key: index for index, (key, _, _) in enumerate(_LOW_RATE)}
+_MASK_INDEX = {mask: index for index, (_, mask, _) in enumerate(_LOW_RATE)}
+
 _SPATIAL_SHAPES = ((240, 320, 1), (286,), (25,), (25,), (25,), (25,))
 
 
-def read_low_rate_targets(env) -> LowRateTargets:
-    """Read native sensors and reject capture/reset misalignment, never reschedule."""
+def _read_validated_samples(env):
+    """Read one fresh snapshot and validate native sample alignment."""
     samples = [env.scene[name].read_sample() for _, _, name in _LOW_RATE]
     first = samples[0]
     if first.episode_id.ndim != 1:
@@ -51,14 +54,32 @@ def read_low_rate_targets(env) -> LowRateTargets:
                 raise ValueError(f"{key} has invalid sample metadata shape/dtype/device")
         if sample.values.device != device or sample.valid.device != device:
             raise ValueError(f"{key} sample values and mask must share the bundle device")
-    for sample in samples[1:]:
-        if not torch.equal(sample.episode_id, first.episode_id):
-            raise RuntimeError("Low-rate sensor reset identity mismatch")
-        both = first.captured & sample.captured
-        if not torch.allclose(sample.capture_time[both], first.capture_time[both], atol=1e-6, rtol=0):
-            raise RuntimeError("Low-rate captures must be aligned; check substep/debug readers")
-        if not torch.allclose(sample.age[both], first.age[both], atol=1e-6, rtol=0):
-            raise RuntimeError("Low-rate sensor clocks must be aligned")
+    peers = samples[1:]
+    episodes = torch.stack([sample.episode_id for sample in peers])
+    captured = torch.stack([sample.captured for sample in peers])
+    times = torch.stack([sample.capture_time for sample in peers])
+    ages = torch.stack([sample.age for sample in peers])
+    both = first.captured.unsqueeze(0) & captured
+    same_episode = (episodes == first.episode_id.unsqueeze(0)).all()
+    same_time = (torch.isclose(times, first.capture_time.unsqueeze(0), atol=1e-6, rtol=0) | ~both).all()
+    same_age = (torch.isclose(ages, first.age.unsqueeze(0), atol=1e-6, rtol=0) | ~both).all()
+    if not bool(same_episode & same_time & same_age):
+        # Diagnose the original error on these same samples, without another read.
+        for sample in samples[1:]:
+            if not torch.equal(sample.episode_id, first.episode_id):
+                raise RuntimeError("Low-rate sensor reset identity mismatch")
+            both = first.captured & sample.captured
+            if not torch.allclose(sample.capture_time[both], first.capture_time[both], atol=1e-6, rtol=0):
+                raise RuntimeError("Low-rate captures must be aligned; check substep/debug readers")
+            if not torch.allclose(sample.age[both], first.age[both], atol=1e-6, rtol=0):
+                raise RuntimeError("Low-rate sensor clocks must be aligned")
+    return samples
+
+
+def read_low_rate_targets(env) -> LowRateTargets:
+    """Read native sensors and reject capture/reset misalignment, never reschedule."""
+    samples = _read_validated_samples(env)
+    first = samples[0]
     metadata = {mask: sample.valid for (_, mask, _), sample in zip(_LOW_RATE, samples, strict=True)}
     metadata.update(
         episode_id=first.episode_id,
@@ -73,14 +94,21 @@ def read_low_rate_targets(env) -> LowRateTargets:
 
 def low_rate_target(env, key: str) -> torch.Tensor:
     """Observation-manager term selecting an approved target key."""
-    return read_low_rate_targets(env).target[key]
+    samples = _read_validated_samples(env)
+    return samples[_TARGET_INDEX[key]].values
 
 
 def sensor_metadata(env, key: str) -> torch.Tensor:
     """Observation-manager term selecting timing or validity metadata."""
     if key == "critic_height_valid":
         return env.scene["terrain_height_scanner"].read_sample().valid
-    return read_low_rate_targets(env).metadata[key]
+    samples = _read_validated_samples(env)
+    if key in _MASK_INDEX:
+        return samples[_MASK_INDEX[key]].valid
+    if key == "low_rate_valid":
+        return torch.stack([sample.captured for sample in samples]).all(dim=0)
+    field = {"episode_id": "episode_id", "low_rate_capture_time": "capture_time", "low_rate_age": "age"}[key]
+    return getattr(samples[0], field)
 
 
 def metric_height_scan(env, sensor_cfg) -> torch.Tensor:

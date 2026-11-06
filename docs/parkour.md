@@ -171,3 +171,21 @@ Defaults remain depth-only. Unsupported types retain native Camera validation.
 For a separate RGB-only debug camera, use native `isaaclab.sensors.CameraCfg`
 with `data_types=["rgb"]` and `NewtonWarpRendererCfg`, rather than the training
 `HeldDepthCameraCfg`. This change does not add other rendering backends.
+
+
+### Low-rate observation performance and termination ownership
+
+Low-rate observation selectors validate a fresh six-sensor snapshot and return
+only the requested field. The complete `read_low_rate_targets` API remains
+available for consumers needing all fields. Fixed-shape alignment comparisons
+share one GPU-to-host decision on valid data; failures diagnose the original
+error on the same samples. No cross-call cache is used, so same-step resets and
+metadata changes are visible immediately. Sensor rates, history and storage
+ownership are unchanged.
+
+The single termination state owner lives in `mdp.terminations` and is available
+as `mdp.ParkourAttemptState` through native lazy exports. The former `mdp.attempts`
+module was removed; direct consumers must use the termination module.
+
+Four-environment performance measurement and its limits are recorded with the
+Issue #4 performance verification documents.

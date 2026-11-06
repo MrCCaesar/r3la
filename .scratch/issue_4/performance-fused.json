@@ -1,0 +1,92 @@
+{
+  "commit": "5768061d5ee4cdf4fb33dbe31d5093476ef601a0",
+  "variant": "fused",
+  "num_envs": 4,
+  "seed": 7,
+  "actions": "zero residual action",
+  "warmup": 50,
+  "windows": 5,
+  "steps_per_window": 100,
+  "camera_outputs": [
+    "rgb",
+    "distance_to_image_plane"
+  ],
+  "terrain_families": [
+    "box",
+    "gap",
+    "stairs",
+    "tilted_stairs",
+    "side_slope",
+    "rough_grid"
+  ],
+  "terrain_shape": [
+    10,
+    20
+  ],
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "torch": "2.11.0+cu130",
+  "peak_allocated_mib": 14.0693359375,
+  "terrain_types": [
+    0,
+    4,
+    9,
+    14
+  ],
+  "step_windows_ms": [
+    13.608527589822188,
+    13.705529239960015,
+    13.741912299883552,
+    13.75499679998029,
+    13.661685090046376
+  ],
+  "step_median_ms": 13.705529239960015,
+  "observation_windows_ms": [
+    8.619158660876565,
+    8.672009810688905,
+    8.72722199652344,
+    8.621150571270846,
+    8.63956564804539
+  ],
+  "observation_median_ms": 8.63956564804539,
+  "observation_categories": {
+    "capture": {
+      "count": 99,
+      "mean_ms": 8.778935103122183,
+      "median_ms": 8.72631900710985,
+      "p95_ms": 9.397740010172129
+    },
+    "hold": {
+      "count": 400,
+      "mean_ms": 8.620953233767068,
+      "median_ms": 8.544548996724188,
+      "p95_ms": 9.153542050626129
+    },
+    "reset": {
+      "count": 1,
+      "mean_ms": 10.414800024591386,
+      "median_ms": 10.414800024591386,
+      "p95_ms": 10.414800024591386
+    }
+  },
+  "diagnostic_bundle": {
+    "count": 480,
+    "mean_ms": 0.423288116871845,
+    "median_ms": 0.32971001928672194,
+    "p95_ms": 1.6753869713284075
+  },
+  "diagnostic_bundle_calls_per_observation": 16.0,
+  "diagnostic_bundle_wall_share": 0.7805675121958037,
+  "diagnostic_observation": {
+    "count": 30,
+    "mean_ms": 8.676520306228971,
+    "median_ms": 8.545012038666755,
+    "p95_ms": 9.405605029314756
+  },
+  "partial_reset": {
+    "count": 5,
+    "mean_ms": 16.36188719421625,
+    "median_ms": 12.735362979583442,
+    "p95_ms": 30.131143983453512
+  },
+  "completed": true
+}

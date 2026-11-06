@@ -262,7 +262,7 @@ This is an approved project accessor, not an existing atomic IsaacLab operation.
 
 ## P1 approved attempt and curriculum APIs
 
-Locations under existing `src/r3la/tasks/velocity/mdp`: attempts.py, terminations.py,
+Locations under existing `src/r3la/tasks/velocity/mdp`: terminations.py,
 curriculums.py, commands.py; observations/rewards/events remain existing modules.
 
 ### ParkourAttemptState(ManagerTermBase) — approved revised S35
@@ -524,3 +524,10 @@ cloned for retention. The held SensorSample and training observations still
 contain only metric image-plane depth with existing masks/cadence/episode rules.
 Defaults remain depth-only; RGB-only debug cameras use native CameraCfg. No
 backend or calibration/mount change is included. Examples: docs/parkour.md.
+
+
+## Approved performance follow-up contracts — 2026-11-06
+
+Detailed unchanged public API and error/ownership requirements are recorded in
+performance-spec.md PS1–PS4 (Approved by user at Plan entry). ADR-009 records
+the accepted no-cache optimization direction. Implementation completed in T13–T15; final production evidence is recorded in performance-verification.md.

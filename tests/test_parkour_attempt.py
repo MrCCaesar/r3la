@@ -7,7 +7,7 @@ import torch
 
 from isaaclab.managers import TerminationTermCfg
 
-from r3la.tasks.velocity.mdp.attempts import ParkourAttemptState
+from r3la.tasks.velocity.mdp.terminations import ParkourAttemptState
 
 
 def proxy(tensor):
@@ -336,3 +336,10 @@ def test_rough_grid_crossing_requires_far_flat_support(surface):
     env.common_step_counter += 1
     term(env)
     assert term.bypass.all() and not term.success.any()
+
+
+def test_termination_public_export_has_one_state_implementation():
+    from r3la.tasks.velocity import mdp
+    from r3la.tasks.velocity.mdp.terminations import ParkourAttemptState as Term
+
+    assert mdp.ParkourAttemptState is Term

@@ -1,0 +1,89 @@
+{
+  "commit": "5768061d5ee4cdf4fb33dbe31d5093476ef601a0",
+  "variant": "baseline",
+  "num_envs": 4,
+  "seed": 7,
+  "actions": "zero residual action",
+  "warmup": 50,
+  "windows": 5,
+  "steps_per_window": 100,
+  "camera_outputs": [
+    "rgb",
+    "distance_to_image_plane"
+  ],
+  "terrain_families": [
+    "box",
+    "gap",
+    "stairs",
+    "tilted_stairs",
+    "side_slope",
+    "rough_grid"
+  ],
+  "terrain_shape": [
+    10,
+    20
+  ],
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "torch": "2.11.0+cu130",
+  "peak_allocated_mib": 14.0693359375,
+  "terrain_types": [
+    0,
+    4,
+    9,
+    14
+  ],
+  "step_windows_ms": [
+    14.490375939640217,
+    14.167843020404689,
+    13.78041704010684,
+    13.452813980402425,
+    13.26811399019789
+  ],
+  "step_median_ms": 13.78041704010684,
+  "observation_windows_ms": [
+    8.204872160567902,
+    8.253997748252004,
+    8.304975039791316,
+    8.323588382918388,
+    8.248201870592311
+  ],
+  "observation_median_ms": 8.253997748252004,
+  "observation_categories": {
+    "capture": {
+      "count": 99,
+      "mean_ms": 8.447240637685878,
+      "median_ms": 8.391307957936078,
+      "p95_ms": 8.923167013563216
+    },
+    "hold": {
+      "count": 400,
+      "mean_ms": 8.217894395202165,
+      "median_ms": 8.172471018042415,
+      "p95_ms": 8.591363963205367
+    },
+    "reset": {
+      "count": 1,
+      "mean_ms": 10.128939000423998,
+      "median_ms": 10.128939000423998,
+      "p95_ms": 10.128939000423998
+    }
+  },
+  "diagnostic_bundle": {
+    "count": 0
+  },
+  "diagnostic_bundle_calls_per_observation": 0.0,
+  "diagnostic_bundle_wall_share": 0.0,
+  "diagnostic_observation": {
+    "count": 30,
+    "mean_ms": 8.238716536046317,
+    "median_ms": 8.193046523956582,
+    "p95_ms": 8.556261018384248
+  },
+  "partial_reset": {
+    "count": 5,
+    "mean_ms": 16.1570617929101,
+    "median_ms": 12.170572008471936,
+    "p95_ms": 30.381366959773004
+  },
+  "completed": true
+}

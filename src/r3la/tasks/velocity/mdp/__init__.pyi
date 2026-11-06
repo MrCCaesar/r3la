@@ -41,7 +41,7 @@ from isaaclab.envs.mdp import *  # noqa: F401, F403
 from isaaclab_tasks.core.velocity.mdp import *  # noqa: F401, F403
 
 from .actions import validate_parkour_actions
-from .attempts import ParkourAttemptState
+from .terminations import ParkourAttemptState
 from .commands import ParkourVelocityCommand, ParkourVelocityCommandCfg
 from .curriculums import ParkourCurriculum
 from .events import randomize_shared_material, reset_parkour_state

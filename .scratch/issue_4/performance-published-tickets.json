@@ -1,0 +1,35 @@
+{
+  "T13": {
+    "number": 17,
+    "id": 6235595260,
+    "url": "https://github.com/MrCCaesar/r3la/issues/17",
+    "title": "[SWAP T13] 低频传感器校验提速并保持完整读取契约",
+    "blockers": []
+  },
+  "T14": {
+    "number": 18,
+    "id": 6235596722,
+    "url": "https://github.com/MrCCaesar/r3la/issues/18",
+    "title": "[SWAP T14] 按需返回单项观测与元数据",
+    "blockers": [
+      "T13"
+    ]
+  },
+  "T15": {
+    "number": 19,
+    "id": 6235601205,
+    "url": "https://github.com/MrCCaesar/r3la/issues/19",
+    "title": "[SWAP T15] 将尝试状态归入 termination 并保持单一状态所有者",
+    "blockers": []
+  },
+  "T16": {
+    "number": 20,
+    "id": 6235604041,
+    "url": "https://github.com/MrCCaesar/r3la/issues/20",
+    "title": "[SWAP T16] 验收四环境性能目标与整体功能等价",
+    "blockers": [
+      "T14",
+      "T15"
+    ]
+  }
+}

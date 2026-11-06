@@ -1,0 +1,5 @@
+{
+  "src/r3la/tasks/velocity/mdp/sensor_observations.py": "d156e3981e6aa268171415de8f63cd7585ea472c94d30a8ea017ba14252a7a58",
+  "src/r3la/tasks/velocity/mdp/terminations.py": "9e4f0c7502a38cb4b92c1f843940ba591b9be528b146c5f005eaea8ddbd0f7c1",
+  "src/r3la/tasks/velocity/mdp/__init__.pyi": "27ce013ed6d9920a57e3c9b60217b7d96cf181b0c2bea0cacf3270472afbbbd6"
+}

@@ -1,0 +1,19 @@
+.........................F                                               [100%]
+=================================== FAILURES ===================================
+_________ test_termination_public_export_has_one_state_implementation __________
+
+    def test_termination_public_export_has_one_state_implementation():
+        from r3la.tasks.velocity import mdp
+>       from r3la.tasks.velocity.mdp.terminations import ParkourAttemptState as Term
+E       ModuleNotFoundError: No module named 'r3la.tasks.velocity.mdp.terminations'
+
+tests/test_parkour_attempt.py:343: ModuleNotFoundError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/torch/jit/_script.py:1488: 35 warnings
+  /home/sevnce-mr/r3la/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1488: DeprecationWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_parkour_attempt.py::test_termination_public_export_has_one_state_implementation
+1 failed, 25 passed, 35 warnings in 1.60s

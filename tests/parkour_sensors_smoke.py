@@ -108,8 +108,12 @@ with launch_simulation(cfg, args):
         ):
             env.scene[name].reset()
         production = read_low_rate_targets(env)
-        assert torch.count_nonzero(production.target["depth_image"]) == 0
-        assert not production.metadata["depth_valid"].any()
+        raw = camera.data.output["distance_to_image_plane"].torch
+        near, far = camera.cfg.spawn.clipping_range
+        expected_valid = torch.isfinite(raw) & (raw >= near) & (raw <= far)
+        assert expected_valid.any(), "current mount should expose visible depth pixels"
+        torch.testing.assert_close(production.metadata["depth_valid"], expected_valid)
+        torch.testing.assert_close(production.target["depth_image"], torch.where(expected_valid, raw, 0.0))
         calibration = env.scene["calibration_camera"]
         calibration.reset()
         image = calibration.read_sample().values
@@ -127,7 +131,7 @@ with launch_simulation(cfg, args):
             terrain.task_difficulty[terrain.terrain_levels, terrain.terrain_types].tolist(),
             flush=True,
         )
-        # The approved pose is near the Go2 head: center rays hit self at < near.
+        # The separate calibration fixture isolates wall geometry from the robot.
         # Check the analytically projected wall region and require unoccluded samples.
         u = torch.arange(320, device=env.device) + 0.5
         v = torch.arange(240, device=env.device) + 0.5
@@ -140,7 +144,6 @@ with launch_simulation(cfg, args):
         torch.testing.assert_close(
             image[..., 0][valid_wall], torch.full_like(image[..., 0][valid_wall], 0.9), rtol=0, atol=2e-4
         )
-        assert not read_low_rate_targets(env).metadata["depth_valid"][:, 120, 160].any()
         print("known plane image-plane depth, centered intrinsics and optical axes PASS")
 
         # Tilt the robot: foot orientations differ, while every grid must follow base yaw.

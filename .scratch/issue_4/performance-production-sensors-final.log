@@ -1,0 +1,400 @@
+[INFO]: Base environment:
+	Environment device    : cuda:0
+	Environment seed      : 7
+	Physics step-size     : 0.005
+	Rendering step-size   : 0.02
+	Environment step-size : 0.02
+[INFO] Generating terrains based on curriculum took Last: 0.003037 s
+[INFO]: Registered backend 'newton' for factory Articulation.
+I: Initializing Version 2.74.0-release.7316+gl.ec99a64b
+I: Client ID: SJ5AMWXJ
+I: ThreadId(02) hub_client::client::Client::new Launching client mode=Shared with_cleaner=false cache_path=None cache_size=None
+I: ThreadId(03) launch self=Launcher { discovery_lock: RwLock { lock: RwLock { inner: File { fd: 51, path: "/tmp/hub-sevnce-mr.lock", read: false, write: true } } }, mode: Shared, with_cleaner: false, config_file: "/tmp/hub-sevnce-mr-75BBC951.config.json" } cmd="hub" "--mode=shared" "--write-config" "/tmp/hub-sevnce-mr-75BBC951.config.json" "--"
+I: Not using Hub: Hub not found
+I: Successfully created S3 provider for https://omniverse-content-production.s3-us-west-2.amazonaws.com
+I: Using CloudFront http://dcb18d6mfegct.cloudfront.net/, List = No
+[WARNING]: Serving remote assets from the local cache under '/tmp'. Each copy is checked against the server before use; delete the directory to force a full re-download.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.2/Isaac/IsaacLab/Robots/Unitree/Go2/go2.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.2/Isaac/IsaacLab/Robots/Unitree/Go2/go2.usd'.
+[INFO]: Loading local copy of remote asset 'https://omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.2/Isaac/IsaacLab/Robots/Unitree/Go2/Props/instanceable_meshes.usd' from '/tmp/https/omniverse-content-production.s3-us-west-2.amazonaws.com/Assets/Isaac/6.2/Isaac/IsaacLab/Robots/Unitree/Go2/Props/instanceable_meshes.usd'.
+[INFO]: Registered backend 'newton' for factory ContactSensor.
+[INFO]: Using renderer: NewtonWarpRenderer
+[INFO]: Using renderer: NewtonWarpRenderer
+/home/sevnce-mr/r3la/.venv/lib/python3.12/site-packages/newton/_src/usd/utils.py:1941: NewtonWarning: Opacity data contains 64 values; using the first value as the shape opacity.
+  opacity = _coerce_opacity(display_opacity.Get(), warn_on_multiple=True)
+/home/sevnce-mr/IsaacLab/source/isaaclab_newton/isaaclab_newton/cloner/newton_clone_utils.py:139: FutureWarning: Newton shape color replacement is enabled; this workaround will be deprecated in a future release.
+  replace_newton_builder_shape_colors(builder, stage)
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_2) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_3) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_4) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_2) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_3) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_4) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_2) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_3) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_4) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_2) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_3) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/base/visuals/mesh_0/material_4) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FL_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/FR_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RL_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_hip/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_hip/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_thigh/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_thigh/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_calf/visuals/mesh_0/material_0) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_calf/visuals/mesh_0/material_1) but MaterialBindingAPI is not applied on the prim
+Warning: in BindingsAtPrim at line 669 of .conan2/data/b/openu6ff0a704ef94d/b/pxr/usd/usdShade/materialBindingAPI.cpp -- Found material bindings on prim at path (/World/envs/env_0/Robot/RR_foot/visuals/mesh_0) but MaterialBindingAPI is not applied on the prim
+[INFO]: Time taken for scene creation Last: 4.155942 s, Mean: 4.155942 s, Std: 0.000000 s, N: 1
+[INFO]: Scene manager: <class InteractiveScene>
+	Number of environments: 2
+	Environment spacing   : 2.5
+	Source prim name      : /World/envs/env_0
+	Global prim paths     : ['/World/ground']
+[INFO]: Dispatching MODEL_INIT callbacks
+[INFO]: Finalizing model on device: cuda:0
+Finalize builder took: Last: 0.187506 s, Mean: 0.187506 s, Std: 0.000000 s, N: 1
+[INFO]: Dispatching PHYSICS_READY callbacks
+[INFO]: Simulation parameters for joints in /World/envs/env_[^/]+/Robot:
++--------------------------------------------------------------------------------------------------------------------------------+
+|                             Simulation Joint Information (Prim path: /World/envs/env_[^/]+/Robot)                              |
++-------+----------------+-----------+---------+----------+-----------------+------------------+-----------------+---------------+
+| Index | Name           | Stiffness | Damping | Armature | Static Friction | Position Limits  | Velocity Limits | Effort Limits |
++-------+----------------+-----------+---------+----------+-----------------+------------------+-----------------+---------------+
+|   0   | FL_hip_joint   |   0.000   |  0.000  |  0.000   |      0.000      | [-1.047, 1.047]  |      30.100     |     23.700    |
+|   1   | FL_thigh_joint |   0.000   |  0.000  |  0.000   |      0.000      | [-1.571, 3.491]  |      30.100     |     23.700    |
+|   2   | FL_calf_joint  |   0.000   |  0.000  |  0.000   |      0.000      | [-2.723, -0.838] |      15.700     |     45.430    |
+|   3   | FR_hip_joint   |   0.000   |  0.000  |  0.000   |      0.000      | [-1.047, 1.047]  |      30.100     |     23.700    |
+|   4   | FR_thigh_joint |   0.000   |  0.000  |  0.000   |      0.000      | [-1.571, 3.491]  |      30.100     |     23.700    |
+|   5   | FR_calf_joint  |   0.000   |  0.000  |  0.000   |      0.000      | [-2.723, -0.838] |      15.700     |     45.430    |
+|   6   | RL_hip_joint   |   0.000   |  0.000  |  0.000   |      0.000      | [-1.047, 1.047]  |      30.100     |     23.700    |
+|   7   | RL_thigh_joint |   0.000   |  0.000  |  0.000   |      0.000      | [-0.524, 4.538]  |      30.100     |     23.700    |
+|   8   | RL_calf_joint  |   0.000   |  0.000  |  0.000   |      0.000      | [-2.723, -0.838] |      15.700     |     45.430    |
+|   9   | RR_hip_joint   |   0.000   |  0.000  |  0.000   |      0.000      | [-1.047, 1.047]  |      30.100     |     23.700    |
+|   10  | RR_thigh_joint |   0.000   |  0.000  |  0.000   |      0.000      | [-0.524, 4.538]  |      30.100     |     23.700    |
+|   11  | RR_calf_joint  |   0.000   |  0.000  |  0.000   |      0.000      | [-2.723, -0.838] |      15.700     |     45.430    |
++-------+----------------+-----------+---------+----------+-----------------+------------------+-----------------+---------------+
+[INFO]: Adding contact sensor for /World/envs/env_[^/]+/Robot/[^/]* with filter ['/World/ground/terrain/mesh']
+Contact sensor construction took: Last: 0.001942 s, Mean: 0.001942 s, Std: 0.000000 s, N: 1
+[INFO]: Contact sensor initialized with 19 sensors.
+[INFO]: Creating buffers for contact sensor data with num_envs: 2, num_sensors: 19, num_filter_objects: 1, history_length: 4, generate_force_matrix: True, track_contact_points: True, track_air_time: True, track_pose: False, device: cuda:0
+[INFO]: Creating buffers for contact sensor data with num_envs: 2, num_sensors: 19, num_filter_objects: 1, history_length: 4, generate_force_matrix: True, track_contact_points: True, track_air_time: True, track_pose: False, device: cuda:0
+[INFO]: Registered backend 'newton' for factory FrameView.
+[INFO]: Time taken for NewtonSegmentationMapper.build_mapping (semantic_segmentation, colorize=True) Last: 0.004746 s, Mean: 0.004746 s, Std: 0.000000 s, N: 1
+[INFO]: Time taken for NewtonSegmentationMapper.build_mapping (instance_segmentation, colorize=True) Last: 0.000088 s, Mean: 0.000088 s, Std: 0.000000 s, N: 1
+Initialize solver took: Last: 1.008085 s, Mean: 1.008085 s, Std: 0.000000 s, N: 1
+[INFO]: Time taken for simulation start Last: 1.444677 s, Mean: 1.444677 s, Std: 0.000000 s, N: 1
+[INFO]: Command Manager: <CommandManager> contains 1 active terms.
++------------------------------------------------+
+|              Active Command Terms              |
++-------+---------------+------------------------+
+| Index | Name          |          Type          |
++-------+---------------+------------------------+
+|   0   | base_velocity | ParkourVelocityCommand |
++-------+---------------+------------------------+
+
+[INFO]: Event Manager: <EventManager> contains 2 active terms.
++---------------------------------------+
+| Active Event Terms in Mode: 'startup' |
++----------+----------------------------+
+|  Index   | Name                       |
++----------+----------------------------+
+|    0     | physics_material           |
+|    1     | base_com                   |
+|    2     | base_mass                  |
+|    3     | actuator_gains             |
++----------+----------------------------+
++-------------------------------------+
+| Active Event Terms in Mode: 'reset' |
++------------+------------------------+
+|   Index    | Name                   |
++------------+------------------------+
+|     0      | reset_base             |
++------------+------------------------+
+
+[INFO]: Recorder Manager: <RecorderManager> contains 0 active terms.
++-----------------------+
+| Active Recorder Terms |
++------------+----------+
+|   Index    | Name     |
++------------+----------+
++------------+----------+
+
+[INFO]: Resolved joint names for the action term JointPositionAction: ['FL_hip_joint', 'FL_thigh_joint', 'FL_calf_joint', 'FR_hip_joint', 'FR_thigh_joint', 'FR_calf_joint', 'RL_hip_joint', 'RL_thigh_joint', 'RL_calf_joint', 'RR_hip_joint', 'RR_thigh_joint', 'RR_calf_joint'] [tensor([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11], device='cuda:0',
+       dtype=torch.int32)]
+[INFO]: Action Manager: <ActionManager> contains 1 active terms.
++---------------------------------+
+| Active Action Terms (shape: 12) |
++-------+-----------+-------------+
+| Index | Name      |   Dimension |
++-------+-----------+-------------+
+|   0   | joint_pos |          12 |
++-------+-----------+-------------+
+
+/home/sevnce-mr/r3la/src/r3la/tasks/velocity/mdp/observations.py:94: UserWarning: In Newton, body com pose always has unit quaternion. Consider using body_com_pos_b instead.Querying this property requires appending a unit quaternion to the position which is expensive.
+  current_com = asset.data.body_com_pose_b.torch[:, asset_cfg.body_ids, :3]
+[INFO]: Observation Manager: <ObservationManager> contains 6 groups.
++--------------------------------------------------------------+
+| Active Observation Terms in Group: 'proprio' (shape: (210,)) |
++------------+------------------------------------+------------+
+|   Index    | Name                               |   Shape    |
++------------+------------------------------------+------------+
+|     0      | base_ang_vel                       |   (15,)    |
+|     1      | projected_gravity                  |   (15,)    |
+|     2      | joint_pos                          |   (60,)    |
+|     3      | joint_vel                          |   (60,)    |
+|     4      | last_actions                       |   (60,)    |
++------------+------------------------------------+------------+
++-------------------------------------------------------------+
+| Active Observation Terms in Group: 'commands' (shape: (3,)) |
++-----------+-----------------------------------+-------------+
+|   Index   | Name                              |    Shape    |
++-----------+-----------------------------------+-------------+
+|     0     | velocity_commands                 |     (3,)    |
++-----------+-----------------------------------+-------------+
++---------------------------------------------+
+| Active Observation Terms in Group: 'target' |
++-------+-------------------+-----------------+
+| Index | Name              |      Shape      |
++-------+-------------------+-----------------+
+|   0   | body_height_scan  |      (286,)     |
+|   1   | lf_height_scan    |      (25,)      |
+|   2   | rf_height_scan    |      (25,)      |
+|   3   | lh_height_scan    |      (25,)      |
+|   4   | rh_height_scan    |      (25,)      |
+|   5   | depth_image       |  (240, 320, 1)  |
++-------+-------------------+-----------------+
++------------------------------------------+
+| Active Observation Terms in Group: 'amp' |
++--------+----------------------+----------+
+| Index  | Name                 |  Shape   |
++--------+----------------------+----------+
+|   0    | base_pos_w           |   (3,)   |
+|   1    | base_quat_w          |   (4,)   |
+|   2    | base_lin_vel_b       |   (3,)   |
+|   3    | base_ang_vel_b       |   (3,)   |
+|   4    | joint_pos            |  (12,)   |
+|   5    | joint_vel            |  (12,)   |
+|   6    | foot_pos_b           |  (4, 3)  |
+|   7    | base_height          |   (1,)   |
+|   8    | base_height_valid    |   (1,)   |
++--------+----------------------+----------+
++-----------------------------------------------+
+| Active Observation Terms in Group: 'metadata' |
++-------+-----------------------+---------------+
+| Index | Name                  |     Shape     |
++-------+-----------------------+---------------+
+|   0   | episode_id            |       ()      |
+|   1   | low_rate_capture_time |       ()      |
+|   2   | low_rate_age          |       ()      |
+|   3   | low_rate_valid        |       ()      |
+|   4   | depth_valid           | (240, 320, 1) |
+|   5   | body_height_valid     |     (286,)    |
+|   6   | lf_height_valid       |     (25,)     |
+|   7   | rf_height_valid       |     (25,)     |
+|   8   | lh_height_valid       |     (25,)     |
+|   9   | rh_height_valid       |     (25,)     |
+|   10  | base_height_valid     |      (1,)     |
+|   11  | critic_height_valid   |     (187,)    |
++-------+-----------------------+---------------+
++----------------------------------------------------------------+
+| Active Observation Terms in Group: 'privilege' (shape: (273,)) |
++------------+------------------------------------+--------------+
+|   Index    | Name                               |    Shape     |
++------------+------------------------------------+--------------+
+|     0      | leg_contacts                       |     (8,)     |
+|     1      | actuator_gains                     |    (24,)     |
+|     2      | com_offsets                        |     (3,)     |
+|     3      | base_mass                          |     (1,)     |
+|     4      | foot_restitution                   |     (1,)     |
+|     5      | foot_friction                      |     (1,)     |
+|     6      | base_lin_vel                       |     (3,)     |
+|     7      | base_ang_vel                       |     (3,)     |
+|     8      | projected_gravity                  |     (3,)     |
+|     9      | velocity_commands                  |     (3,)     |
+|     10     | joint_pos                          |    (12,)     |
+|     11     | joint_vel                          |    (12,)     |
+|     12     | last_action                        |    (12,)     |
+|     13     | terrain_height                     |    (187,)    |
++------------+------------------------------------+--------------+
+
+[INFO]: Termination Manager: <TerminationManager> contains 3 active terms.
++------------------------------------+
+|      Active Termination Terms      |
++-------+-----------------+----------+
+| Index | Name            | Time Out |
++-------+-----------------+----------+
+|   0   | parkour_attempt |  False   |
+|   1   | time_out        |   True   |
+|   2   | base_contact    |  False   |
++-------+-----------------+----------+
+
+[INFO]: Reward Manager: <RewardManager> contains 16 active terms.
++-----------------------------------------+
+|           Active Reward Terms           |
++-------+------------------------+--------+
+| Index | Name                   | Weight |
++-------+------------------------+--------+
+|   0   | track_lin_vel_xy_exp   |    1.0 |
+|   1   | track_ang_vel_z_exp    |    0.5 |
+|   2   | base_height_stance_exp |    1.0 |
+|   3   | feet_air_time          |    0.5 |
+|   4   | base_height_l2         |   -5.0 |
+|   5   | lin_vel_z_l2           |   -1.0 |
+|   6   | ang_vel_xy_l2          |  -0.05 |
+|   7   | flat_orientation_l2    |   -0.2 |
+|   8   | undesired_contacts     |   -1.0 |
+|   9   | feet_stumble           |   -0.1 |
+|   10  | hip_abad_pos           |   -1.0 |
+|   11  | dof_torques_l2         | -1e-06 |
+|   12  | dof_acc_l2             | -5e-07 |
+|   13  | mechanical_joint_power | -1e-06 |
+|   14  | action_rate_l2         |  -0.01 |
+|   15  | action_smooth_l2       | -0.004 |
++-------+------------------------+--------+
+
+[INFO]: Curriculum Manager: <CurriculumManager> contains 1 active terms.
++-------------------------+
+| Active Curriculum Terms |
++-------+-----------------+
+| Index | Name            |
++-------+-----------------+
+|   0   | terrain_levels  |
++-------+-----------------+
+
+/home/sevnce-mr/IsaacLab/source/isaaclab/isaaclab/envs/mdp/events.py:503: UserWarning: In Newton, body com pose always has unit quaternion. Consider using body_com_pos_b instead.Querying this property requires appending a unit quaternion to the position which is expensive.
+  self.default_com = self.asset.data.body_com_pose_b.torch.clone()
+[INFO]: Completed setting up the environment...
+/home/sevnce-mr/r3la/tests/parkour_sensors_smoke.py:95: DeprecationWarning: The `root_state_w` property will be deprecated in a IsaacLab 4.0. Please use `root_link_pose_w` and `root_com_vel_w` instead.
+  state = robot.data.root_state_w.torch.clone()
+/home/sevnce-mr/r3la/tests/parkour_sensors_smoke.py:99: DeprecationWarning: The function 'write_root_state_to_sim' will be deprecated in a future release. Please use 'write_root_link_pose_to_sim_index' and 'write_root_com_velocity_to_sim_index' instead.
+  robot.write_root_state_to_sim(state)
+native debug outputs PASS: RGB/RGBA/HDR/albedo/depth/range/normals/segmentation
+plane diagnostic root [[1.5, 0.0, 0.5], [-8.5, 0.0, 0.5]] camera [[1.850000023841858, 0.0, 0.550000011920929], [-8.149999618530273, 0.0, 0.550000011920929]] optical_quat [[0.5, -0.5, 0.5, -0.5], [0.5, -0.5, 0.5, -0.5]] rawcenter [[1.149999976158142], [1.1499996185302734]] difficulty [1.0, 1.0]
+wall diagnostics 60048 range 0.0 3.7850069999694824
+/home/sevnce-mr/r3la/tests/parkour_sensors_smoke.py:155: DeprecationWarning: The function 'write_root_state_to_sim' will be deprecated in a future release. Please use 'write_root_link_pose_to_sim_index' and 'write_root_com_velocity_to_sim_index' instead.
+  robot.write_root_state_to_sim(state)
+known plane image-plane depth, centered intrinsics and optical axes PASS
+base-yaw foot grids, capture-time reference Z, launch offset and no-hit encoding PASS
+CUDA graph took: Last: 0.527827 s, Mean: 0.527827 s, Std: 0.000000 s, N: 1
+T09 PASS: 10 Hz hold, 50 Hz critic, per-row reset identity and renderer-write isolation
+[INFO]: SimulationContext cleared
