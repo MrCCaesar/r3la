@@ -43,3 +43,9 @@ performance-research.md, performance-baseline.json and performance-fused.json;
 16 existing sensor tests and120 prototype differential cases. These are research
 results, not final implementation acceptance. Related ADR-005 and ADR-007 retain
 their scheduling/sample ownership/environment lifecycle decisions.
+
+## Metadata removal amendment
+
+Partially superseded by accepted ADR-010 after the user explicitly requested
+removal of unnecessary metadata exports and consistency checks. Earlier evidence
+and decisions above are historical; native lifecycle/held-buffer ownership remain.

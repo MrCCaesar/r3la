@@ -17,7 +17,7 @@ from isaaclab.utils.math import quat_apply_yaw, quat_from_euler_xyz
 from isaaclab_tasks.utils import resolve_task_config
 
 import r3la.tasks  # noqa: F401
-from r3la.tasks.velocity.mdp.sensor_observations import read_low_rate_targets
+from r3la.tasks.velocity.mdp.sensor_observations import low_rate_target
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--debug-outputs", action="store_true")
@@ -46,8 +46,10 @@ cfg.scene.calibration_camera = cfg.scene.front_camera.replace(
 
 
 def clone_targets(env):
-    bundle = read_low_rate_targets(env)
-    return {key: value.clone() for key, value in bundle.target.items()}
+    return {key: low_rate_target(env, key).clone() for key in (
+        "depth_image", "body_height_scan", "lf_height_scan",
+        "rf_height_scan", "lh_height_scan", "rh_height_scan",
+    )}
 
 
 with launch_simulation(cfg, args):
@@ -65,12 +67,7 @@ with launch_simulation(cfg, args):
         for key, shape in expected.items():
             assert obs["target"][key].shape == shape and obs["target"][key].dtype == torch.float32
             assert torch.isfinite(obs["target"][key]).all()
-        metadata = obs["metadata"]
-        assert metadata["low_rate_valid"].all()
-        assert metadata["episode_id"].dtype == torch.int64
-        assert torch.count_nonzero(metadata["low_rate_capture_time"]) == 0
-        assert torch.count_nonzero(metadata["low_rate_age"]) == 0
-        assert metadata["critic_height_valid"].shape == (2, 187)
+        assert "metadata" not in obs
         camera = env.scene["front_camera"]
         assert not camera.supports_batch_update
         if args.debug_outputs:
@@ -107,13 +104,13 @@ with launch_simulation(cfg, args):
             "terrain_height_scanner",
         ):
             env.scene[name].reset()
-        production = read_low_rate_targets(env)
+        production = camera.read_sample()
         raw = camera.data.output["distance_to_image_plane"].torch
         near, far = camera.cfg.spawn.clipping_range
         expected_valid = torch.isfinite(raw) & (raw >= near) & (raw <= far)
         assert expected_valid.any(), "current mount should expose visible depth pixels"
-        torch.testing.assert_close(production.metadata["depth_valid"], expected_valid)
-        torch.testing.assert_close(production.target["depth_image"], torch.where(expected_valid, raw, 0.0))
+        torch.testing.assert_close(production.valid, expected_valid)
+        torch.testing.assert_close(production.values, torch.where(expected_valid, raw, 0.0))
         calibration = env.scene["calibration_camera"]
         calibration.reset()
         image = calibration.read_sample().values
@@ -198,25 +195,25 @@ with launch_simulation(cfg, args):
             for key, value in initial.items():
                 torch.testing.assert_close(obs["target"][key], value, rtol=0, atol=0)
             torch.testing.assert_close(
-                obs["metadata"]["low_rate_age"], torch.full((2,), step * 0.02, device=env.device), atol=1e-6, rtol=0
+                camera.read_sample().age, torch.full((2,), step * 0.02, device=env.device), atol=1e-6, rtol=0
             )
         held = clone_targets(env)
         calibration_held = calibration.read_sample().values.clone()
-        episode = obs["metadata"]["episode_id"].clone()
+        episode = camera.read_sample().episode_id.clone()
         # Native reset renders all camera aliases; row 1 exported storage must stay held.
         env._reset_idx(torch.tensor([0], device=env.device))
         obs = env.observation_manager.compute()
         torch.testing.assert_close(calibration.read_sample().values[1], calibration_held[1], rtol=0, atol=0)
         for key, value in held.items():
             torch.testing.assert_close(obs["target"][key][1], value[1], rtol=0, atol=0)
-        assert obs["metadata"]["episode_id"].tolist() == [int(episode[0]) + 1, int(episode[1])]
+        assert camera.read_sample().episode_id.tolist() == [int(episode[0]) + 1, int(episode[1])]
         torch.testing.assert_close(
-            obs["metadata"]["low_rate_age"], torch.tensor([0.0, 0.04], device=env.device), atol=1e-6, rtol=0
+            camera.read_sample().age, torch.tensor([0.0, 0.04], device=env.device), atol=1e-6, rtol=0
         )
         for _ in range(3):
             obs, *_ = env.step(action)
         torch.testing.assert_close(
-            obs["metadata"]["low_rate_capture_time"], torch.tensor([0.0, 0.1], device=env.device), atol=1e-6, rtol=0
+            camera.read_sample().capture_time, torch.tensor([0.0, 0.1], device=env.device), atol=1e-6, rtol=0
         )
         critic = env.scene["terrain_height_scanner"].read_sample()
         torch.testing.assert_close(critic.age, torch.zeros(2, device=env.device), atol=1e-6, rtol=0)

@@ -43,3 +43,9 @@ Current accepted contracts are in ../design.md and ../interfaces.md, consolidate
 through S67. Earlier pending/open statements in this ADR describe its decision
 history and are resolved by the subsequent numbered approvals. No runtime validation
 is implied by Accepted status. Stage closure/Plan approval remains separate.
+
+## Metadata removal amendment
+
+Partially superseded by accepted ADR-010 after the user explicitly requested
+removal of unnecessary metadata exports and consistency checks. Earlier evidence
+and decisions above are historical; native lifecycle/held-buffer ownership remain.

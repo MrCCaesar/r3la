@@ -12,7 +12,7 @@ from isaaclab.utils.math import quat_apply
 from r3la.labs.sensors import HeldDepthCameraCfg
 from r3la.labs.sensors.sample import SensorSample
 from r3la.tasks.velocity.config.Unitree.parkour_env_cfg import UnitreeGo2ParkourEnvCfg
-from r3la.tasks.velocity.mdp.sensor_observations import read_low_rate_targets
+from r3la.tasks.velocity.mdp.sensor_observations import low_rate_target
 
 
 def test_depth_calibration_maps_optical_axes_to_base_and_has_square_pixels():
@@ -79,43 +79,6 @@ def sample_env():
     return SimpleNamespace(scene={name: SampleSensor(shape) for name, shape in zip(names, shapes, strict=True)})
 
 
-def test_low_rate_bundle_preserves_metric_values_and_rejects_misaligned_captures():
-    env = sample_env()
-    bundle = read_low_rate_targets(env)
-    assert tuple(bundle.target) == (
-        "depth_image",
-        "body_height_scan",
-        "lf_height_scan",
-        "rf_height_scan",
-        "lh_height_scan",
-        "rh_height_scan",
-    )
-    assert bundle.target["body_height_scan"][0, 0] == 1.75  # never clipped to 1 m
-    assert bundle.metadata["low_rate_valid"].all()
-    env.scene["fl_height_scanner"].sample.capture_time[1] = 0.2
-    with pytest.raises(RuntimeError, match="aligned"):
-        read_low_rate_targets(env)
-
-
-def test_low_rate_bundle_rejects_reset_identity_mismatch_and_marks_uncaptured_rows():
-    env = sample_env()
-    env.scene["front_camera"].sample.episode_id[0] = 3
-    with pytest.raises(RuntimeError, match="identity"):
-        read_low_rate_targets(env)
-    env = sample_env()
-    env.scene["front_camera"].sample.captured[0] = False
-    assert read_low_rate_targets(env).metadata["low_rate_valid"].tolist() == [False, True]
-
-
-@pytest.mark.parametrize("mask", [torch.ones(2, 1, dtype=torch.bool), torch.ones(2, 286)])
-def test_low_rate_bundle_rejects_wrong_mask_shape_or_dtype(mask):
-    env = sample_env()
-    sensor = env.scene["body_height_scanner"]
-    sensor.sample = replace(sensor.sample, valid=mask)
-    with pytest.raises(ValueError, match="bool mask.*shape"):
-        read_low_rate_targets(env)
-
-
 @pytest.mark.parametrize("extra", ["rgb", "rgba", "rgb_hdr", "albedo", "depth", "distance_to_camera", "normals", "semantic_segmentation", "instance_segmentation"])
 def test_held_depth_camera_accepts_native_debug_outputs(monkeypatch, extra):
     from isaaclab.sensors.camera import Camera
@@ -137,68 +100,34 @@ def test_held_depth_camera_requires_training_depth_even_with_debug_outputs():
         HeldDepthCamera.__init__(SimpleNamespace(), cfg)
 
 
-def test_selectors_return_requested_fields_without_full_bundle(monkeypatch):
-    import r3la.tasks.velocity.mdp.sensor_observations as terms
-
+@pytest.mark.parametrize("key,name", [
+    ("depth_image", "front_camera"),
+    ("body_height_scan", "body_height_scanner"),
+    ("lf_height_scan", "fl_height_scanner"),
+    ("rf_height_scan", "fr_height_scanner"),
+    ("lh_height_scan", "rl_height_scanner"),
+    ("rh_height_scan", "rr_height_scanner"),
+])
+def test_target_reads_only_selected_sensor_and_sees_replacement(key, name):
     env = sample_env()
-    expected = terms.read_low_rate_targets(env)
-    def unexpected_bundle(*args):
-        raise AssertionError('selector assembled the complete bundle')
-    monkeypatch.setattr(terms, 'read_low_rate_targets', unexpected_bundle)
-    for key, value in expected.target.items():
-        assert terms.low_rate_target(env, key) is value
-    for key, value in expected.metadata.items():
-        torch.testing.assert_close(terms.sensor_metadata(env, key), value)
-    env.scene['fl_height_scanner'].sample.capture_time[0] = 0.2
-    with pytest.raises(RuntimeError, match='aligned'):
-        terms.low_rate_target(env, 'body_height_scan')
-    with pytest.raises(RuntimeError, match='aligned'):
-        terms.sensor_metadata(env, 'unknown')
-    env.scene['fl_height_scanner'].sample.capture_time[0] = 0
+    sensor = env.scene[name]
+    # Unrelated sensors need not be available or share capture metadata.
+    env.scene = {name: sensor}
+    sensor.sample.values[0] = 0  # Preserve encoded sensor errors for reconstruction.
+    assert low_rate_target(env, key) is sensor.sample.values
+    sensor.sample = replace(sensor.sample, values=torch.full_like(sensor.sample.values, 2.5))
+    assert low_rate_target(env, key) is sensor.sample.values
     with pytest.raises(KeyError):
-        terms.low_rate_target(env, 'unknown')
+        low_rate_target(env, "unknown")
 
 
-@pytest.mark.parametrize('delta,accepted', [(0.5e-6, True), (1e-6, True), (2e-6, False), (float('nan'), False), (float('inf'), False)])
-def test_alignment_tolerance_and_exceptional_times(delta, accepted):
+def test_training_config_has_no_metadata_export():
+    cfg = UnitreeGo2ParkourEnvCfg()
+    assert not hasattr(cfg.observations, "metadata")
+
+
+def test_empty_target_preserves_shape():
     env = sample_env()
-    env.scene['fl_height_scanner'].sample.capture_time[0] = delta
-    if accepted:
-        read_low_rate_targets(env)
-    else:
-        with pytest.raises(RuntimeError, match='captures must be aligned'):
-            read_low_rate_targets(env)
-    # Uncaptured rows are excluded even for NaN/Inf.
-    env.scene['front_camera'].sample.captured[0] = False
-    read_low_rate_targets(env)
-
-
-def test_alignment_failure_precedence_and_single_snapshot():
-    env = sample_env()
-    env.scene['body_height_scanner'].sample.age[0] = 1
-    env.scene['fl_height_scanner'].sample.episode_id[0] = 1
-    counts = {name: 0 for name in env.scene}
-    for name, sensor in env.scene.items():
-        def read(name=name, sensor=sensor):
-            counts[name] += 1
-            return sensor.sample
-        sensor.read_sample = read
-    with pytest.raises(RuntimeError, match='clocks must be aligned'):
-        read_low_rate_targets(env)
-    assert set(counts.values()) == {1}
-
-
-def test_empty_low_rate_snapshot_preserves_shapes():
-    env = sample_env()
-    for sensor in env.scene.values():
-        fields = {name: getattr(sensor.sample, name)[:0] for name in sensor.sample.__dataclass_fields__}
-        sensor.sample = replace(sensor.sample, **fields)
-    assert read_low_rate_targets(env).metadata['low_rate_valid'].shape == (0,)
-
-
-def test_metadata_device_mismatch_is_rejected_before_alignment():
-    env = sample_env()
-    sensor = env.scene['fl_height_scanner']
-    sensor.sample = replace(sensor.sample, age=torch.zeros(2, device='meta'))
-    with pytest.raises(ValueError, match='metadata shape/dtype/device'):
-        read_low_rate_targets(env)
+    sensor = env.scene["body_height_scanner"]
+    sensor.sample = replace(sensor.sample, values=sensor.sample.values[:0])
+    assert low_rate_target(env, "body_height_scan").shape == (0, 286)

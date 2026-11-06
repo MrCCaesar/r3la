@@ -531,3 +531,16 @@ backend or calibration/mount change is included. Examples: docs/parkour.md.
 Detailed unchanged public API and error/ownership requirements are recorded in
 performance-spec.md PS1–PS4 (Approved by user at Plan entry). ADR-009 records
 the accepted no-cache optimization direction. Implementation completed in T13–T15; final production evidence is recorded in performance-verification.md.
+
+## Approved metadata removal amendment (2026-11-06)
+
+User explicitly requested removing unnecessary metadata exports and consistency
+checks after PPO source investigation. ADR-010 supersedes earlier metadata export
+and cross-sensor validation contracts in this document. Returned groups are now
+proprio, commands, privilege, target and amp. MetadataCfg, sensor_metadata,
+LowRateTargets and read_low_rate_targets are removed without compatibility aliases.
+low_rate_target(env, key: str) -> torch.Tensor returns the selected native sensor's
+borrowed held values with existing shapes/units/frames/dtypes, without checking
+other sensors. Unknown keys raise KeyError; native read errors propagate. Retained
+values must still be cloned by consumers. Internal sensor sample metadata, native
+scheduling, held storage, invalid-value encoding and AMP validity remain unchanged.

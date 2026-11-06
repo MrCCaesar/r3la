@@ -57,7 +57,6 @@ sampled difficulty, rather than the exact endpoint `d=1`.
 | `privilege` | float32 `[N,273]`, current clean critic fields |
 | `target` | metric depth `[N,240,320,1]`, body heights `[N,286]`, four foot heights `[N,25]` |
 | `amp` | named current clean pose, velocity, joints, relative feet, height and height validity |
-| `metadata` | episode identity, low-rate capture time/age/alignment and Boolean spatial masks |
 
 The authoritative feature ordering, units and names are in
 [interfaces.md](../.scratch/issue_4/interfaces.md). In particular, privilege contains
@@ -175,13 +174,13 @@ with `data_types=["rgb"]` and `NewtonWarpRendererCfg`, rather than the training
 
 ### Low-rate observation performance and termination ownership
 
-Low-rate observation selectors validate a fresh six-sensor snapshot and return
-only the requested field. The complete `read_low_rate_targets` API remains
-available for consumers needing all fields. Fixed-shape alignment comparisons
-share one GPU-to-host decision on valid data; failures diagnose the original
-error on the same samples. No cross-call cache is used, so same-step resets and
-metadata changes are visible immediately. Sensor rates, history and storage
-ownership are unchanged.
+Low-rate observation selectors read only the requested sensor's held values.
+Training observations no longer export a `metadata` group or run cross-sensor
+identity, timing, shape or device checks. Native scheduling, reset invalidation,
+held-buffer isolation and zero encoding of invalid measurements remain unchanged.
+Sensor sample timing and validity remain available internally for diagnostics;
+critic validity still supports height rewards and AMP height validity remains.
+No cross-call observation cache is used.
 
 The single termination state owner lives in `mdp.terminations` and is available
 as `mdp.ParkourAttemptState` through native lazy exports. The former `mdp.attempts`

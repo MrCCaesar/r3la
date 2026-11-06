@@ -18,7 +18,7 @@ def test_evaluation_fixes_assignment_command_and_nominal_dynamics_without_noise(
     assert cfg.events.base_com is None and cfg.events.base_mass is None and cfg.events.actuator_gains is None
     assert cfg.events.physics_material.params["nominal"]
     assert cfg.observations.privilege.com_offsets.params["event_name"] is None
-    for name in ("proprio", "privilege", "target", "commands", "amp", "metadata"):
+    for name in ("proprio", "privilege", "target", "commands", "amp"):
         assert not getattr(cfg.observations, name).enable_corruption
     assert cfg.observations.proprio.history_length == 5
     assert cfg.terminations.parkour_attempt is not None and not cfg.compute_final_obs

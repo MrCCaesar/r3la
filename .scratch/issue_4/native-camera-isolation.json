@@ -1,0 +1,278 @@
+{
+  "native_class": "isaaclab.sensors.camera.Camera",
+  "num_envs": 2,
+  "cases": [
+    {
+      "kind": "camera_reset",
+      "initial_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.0
+        ]
+      },
+      "held_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.03999999910593033,
+          0.03999999910593033
+        ]
+      },
+      "before_reset_hold_row1": {
+        "changed_elements": 0,
+        "max_finite_difference": 0.0
+      },
+      "after_reset_before_read_row1": {
+        "changed_elements": 0,
+        "max_finite_difference": 0.0
+      },
+      "after_reset_meta": {
+        "frame": [
+          0,
+          1
+        ],
+        "last_update": [
+          -1.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.03999999910593033
+        ]
+      },
+      "after_capture_row1": {
+        "changed_elements": 0,
+        "max_finite_difference": 0.0
+      },
+      "after_capture_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.03999999910593033
+        ]
+      },
+      "negative_control_nan_count": 76800,
+      "after_reset_before_capture_nan_count": 76800,
+      "after_row0_capture_nan_count": 0,
+      "sentinel_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.03999999910593033
+        ]
+      },
+      "elements_per_row": 76800
+    },
+    {
+      "kind": "environment_reset",
+      "initial_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.0
+        ]
+      },
+      "held_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.03999999910593033,
+          0.03999999910593033
+        ]
+      },
+      "before_reset_hold_row1": {
+        "changed_elements": 0,
+        "max_finite_difference": 0.0
+      },
+      "after_reset_before_read_row1": {
+        "changed_elements": 0,
+        "max_finite_difference": 0.0
+      },
+      "after_reset_meta": {
+        "frame": [
+          0,
+          1
+        ],
+        "last_update": [
+          -1.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.03999999910593033
+        ]
+      },
+      "after_capture_row1": {
+        "changed_elements": 0,
+        "max_finite_difference": 0.0
+      },
+      "after_capture_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.03999999910593033
+        ]
+      },
+      "negative_control_nan_count": 76800,
+      "after_reset_before_capture_nan_count": 76800,
+      "after_row0_capture_nan_count": 0,
+      "sentinel_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.03999999910593033
+        ]
+      },
+      "elements_per_row": 76800
+    },
+    {
+      "kind": "controlled_scene_change",
+      "initial_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.0
+        ]
+      },
+      "held_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.03999999910593033,
+          0.03999999910593033
+        ]
+      },
+      "before_reset_hold_row1": {
+        "changed_elements": 0,
+        "max_finite_difference": 0.0
+      },
+      "after_scene_change_before_capture_row1": {
+        "changed_elements": 0,
+        "max_finite_difference": 0.0
+      },
+      "after_reset_before_read_row1": {
+        "changed_elements": 0,
+        "max_finite_difference": 0.0
+      },
+      "after_reset_meta": {
+        "frame": [
+          0,
+          1
+        ],
+        "last_update": [
+          -1.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.03999999910593033
+        ]
+      },
+      "after_capture_row1": {
+        "changed_elements": 40645,
+        "max_finite_difference": 4.591831684112549
+      },
+      "after_capture_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.03999999910593033
+        ]
+      },
+      "negative_control_nan_count": 76800,
+      "after_reset_before_capture_nan_count": 76800,
+      "after_row0_capture_nan_count": 0,
+      "sentinel_meta": {
+        "frame": [
+          1,
+          1
+        ],
+        "last_update": [
+          0.0,
+          0.0
+        ],
+        "clock": [
+          0.0,
+          0.03999999910593033
+        ]
+      },
+      "elements_per_row": 76800
+    }
+  ],
+  "supports_batch_update": true
+}

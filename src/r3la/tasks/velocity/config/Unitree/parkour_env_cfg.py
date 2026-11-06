@@ -333,27 +333,6 @@ class ObservationsCfg:
 
     
     @configclass
-    class MetadataCfg(ObsGroup):
-        """Per-row capture identity, timing and spatial masks; no noise/history."""
-
-        episode_id = ObsTerm(func=mdp.sensor_metadata, params={"key": "episode_id"})
-        low_rate_capture_time = ObsTerm(func=mdp.sensor_metadata, params={"key": "low_rate_capture_time"})
-        low_rate_age = ObsTerm(func=mdp.sensor_metadata, params={"key": "low_rate_age"})
-        low_rate_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "low_rate_valid"})
-        depth_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "depth_valid"})
-        body_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "body_height_valid"})
-        lf_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "lf_height_valid"})
-        rf_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "rf_height_valid"})
-        lh_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "lh_height_valid"})
-        rh_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "rh_height_valid"})
-        base_height_valid = ObsTerm(func=mdp.amp_field, params={"key": "base_height_valid"})
-        critic_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "critic_height_valid"})
-
-        def __post_init__(self):
-            self.enable_corruption = False
-            self.concatenate_terms = False
-
-    @configclass
     class AmpCfg(ObsGroup):
         """Clean current physical fields for downstream AMP feature construction."""
 
@@ -376,7 +355,6 @@ class ObservationsCfg:
     commands: CommandObsCfg = CommandObsCfg()
     target: TargetCfg = TargetCfg()
     amp: AmpCfg = AmpCfg()
-    metadata: MetadataCfg = MetadataCfg()
     privilege: PrivilegCfg = PrivilegCfg()
 
 

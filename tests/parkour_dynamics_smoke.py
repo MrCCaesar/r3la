@@ -35,7 +35,7 @@ cfg.seed = 7
 
 
 def check_clean(env, obs):
-    assert set(obs) == {"proprio", "commands", "privilege", "amp", "target", "metadata"}
+    assert set(obs) == {"proprio", "commands", "privilege", "amp", "target"}
     assert obs["privilege"].shape == (2, 273)
     amp, state = obs["amp"], env.scene["robot"].data
     expected = {

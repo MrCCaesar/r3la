@@ -378,3 +378,16 @@ cloned for retention. The held SensorSample and training observations still
 contain only metric image-plane depth with existing masks/cadence/episode rules.
 Defaults remain depth-only; RGB-only debug cameras use native CameraCfg. No
 backend or calibration/mount change is included. Examples: docs/parkour.md.
+
+## Approved metadata removal amendment (2026-11-06)
+
+User explicitly requested removing unnecessary metadata exports and consistency
+checks after PPO source investigation. ADR-010 supersedes earlier metadata export
+and cross-sensor validation contracts in this document. Returned groups are now
+proprio, commands, privilege, target and amp. MetadataCfg, sensor_metadata,
+LowRateTargets and read_low_rate_targets are removed without compatibility aliases.
+low_rate_target(env, key: str) -> torch.Tensor returns the selected native sensor's
+borrowed held values with existing shapes/units/frames/dtypes, without checking
+other sensors. Unknown keys raise KeyError; native read errors propagate. Retained
+values must still be cloned by consumers. Internal sensor sample metadata, native
+scheduling, held storage, invalid-value encoding and AMP validity remain unchanged.

@@ -713,3 +713,53 @@ User requested pushing to remote and closing the corresponding sub-issues while
 keeping Issue#4 open. Scope: performance T13–T16, GitHub#17–#20. Push current swap
 branch with final Verify evidence, then close these four completed tasks. Parent
 Issue#4 and earlier task issues are not included in this closure operation.
+
+
+## Native camera investigation follow-up
+
+After delivery (swap85a7bb0 pushed; user-authorized sub-issues#5–#20 closed and
+parent#4 kept open), user requested native Camera partial-reset testing. Completed
+a two-env native-class experiment: another row's capture overwrites row1 depth
+without updating row1 capture metadata. Controlled scene motion changes40645 of
+76800 pixels; ordinary static-image comparisons remain unchanged. Details and
+limitations: native-camera-isolation.md. No production changes or new commit.
+
+
+Metadata training discussion opened under user-invoked grill-with-docs. Facts and
+open consumer decisions in metadata-training-discussion.md; no schema/code change
+approved or performed.
+
+User requested installed RSL-RL PPO/runner data investigation. Completed source
+inspection of 5.5.1 and a CPU TensorDict storage experiment; findings captured in
+rsl-rl-training-data.md. No simulation, training, production edit or stage advance.
+Metadata removal and training interface changes remain unapproved.
+
+## Metadata removal follow-up implemented
+
+User explicitly requested removal of unnecessary metadata exports and consistency
+checks, superseding the preceding unapproved proposal. Removed metadata group,
+metadata/bundle exports and six-sensor observation validation; target terms now
+read only their selected sensor. Native scheduling, held buffers and internal
+validity remain. ADR-010 and interface/design amendments record the new contract.
+164 pytest tests passed; native smoke scripts updated but not run. See
+metadata-removal-verification.md. No commit/push. Runtime Verify remains a next
+step; no new performance result claimed.
+
+## Metadata removal — Formal Verify passed
+
+User approved Verify. Fresh 164-test regression, compileall, whitespace and removed
+lazy-export/config probes passed. Three serial 2-env headless GPU checks exited 0:
+sensor sampling/calibration/partial-reset isolation; evaluation/RSL-RL wrapper
+observations and timeout auto-reset; dynamics/AMP/termination/all-invalid height
+reward (51 steps). Details and exact commands: metadata-removal-verification.md;
+logs metadata-verify-*.log. No production edits during Verify. No training or new
+speedup claim; runner input compatibility remains a separate known limitation.
+No commit/push or issue edit. Verification complete; ready for user review.
+
+## Final delivery authorization
+
+User explicitly requested cleanup, commit, push and closure of parent Issue #4,
+superseding the earlier instruction to keep it open. Removed the completed native
+camera one-off probe and verbose log; retained its structured evidence/report and
+all metadata removal verification logs. No production change since passed Verify.
+Delivery will publish the current swap branch and close #4 after successful push.

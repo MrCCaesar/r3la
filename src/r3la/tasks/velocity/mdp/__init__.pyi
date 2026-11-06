@@ -11,10 +11,8 @@ __all__ = [
     "ParkourVelocityCommand",
     "ParkourVelocityCommandCfg",
     "validate_parkour_actions",
-    "read_low_rate_targets",
     "low_rate_target",
     "metric_height_scan",
-    "sensor_metadata",
     "amp_field",
     "terrain_relative_height",
     "feet_air_time",
@@ -67,4 +65,4 @@ from .rewards import (
     stance_base_height_orientation_exp,
     undesired_contacts,
 )
-from .sensor_observations import low_rate_target, metric_height_scan, read_low_rate_targets, sensor_metadata
+from .sensor_observations import low_rate_target, metric_height_scan

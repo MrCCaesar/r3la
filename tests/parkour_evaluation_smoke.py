@@ -36,15 +36,13 @@ if args.endpoint:
 
 
 def check_outputs(obs):
-    assert set(obs) == {"proprio", "commands", "privilege", "target", "amp", "metadata"}
+    assert set(obs) == {"proprio", "commands", "privilege", "target", "amp"}
     assert obs["proprio"].shape == (2, 210) and obs["privilege"].shape == (2, 273)
     torch.testing.assert_close(obs["commands"], torch.tensor([[1.0, 0.0, 0.0]], device=cfg.sim.device).repeat(2, 1))
     for key in ("proprio", "commands", "privilege"):
         assert torch.isfinite(obs[key]).all()
     for key, value in obs["target"].items():
         assert value.dtype == torch.float32 and torch.isfinite(value).all(), key
-    assert obs["metadata"]["episode_id"].dtype == torch.int64
-    assert obs["metadata"]["low_rate_valid"].all()
 
 
 with launch_simulation(cfg, args):
@@ -60,8 +58,8 @@ with launch_simulation(cfg, args):
         torch.testing.assert_close(robot.data.joint_pos.torch, robot.data.default_joint_pos.torch)
         assert torch.count_nonzero(robot.data.joint_vel.torch) == 0
         assert torch.count_nonzero(obs["privilege"][:, 32:35]) == 0
-        assert obs["metadata"]["critic_height_valid"].all()
-        assert obs["metadata"]["body_height_valid"].all()
+        assert env.scene["terrain_height_scanner"].read_sample().valid.all()
+        assert env.scene["body_height_scanner"].read_sample().valid.all()
         initial = {key: obs[key].clone() for key in ("proprio", "commands", "privilege")}
         initial_amp = {key: value.clone() for key, value in obs["amp"].items()}
         obs, _ = env.reset()
@@ -119,7 +117,8 @@ with launch_simulation(cfg, args):
             returned, reward, done, extras = wrapped.step(torch.zeros(2, 12, device=env.device))
             assert done.tolist() == [1, 0] and extras["time_outs"].tolist() == [True, False]
             assert not extras.get("final_obs")
-            assert returned["metadata", "low_rate_capture_time"][0] == 0
+            assert "metadata" not in returned
+            assert env.scene["front_camera"].read_sample().capture_time[0] == 0
             print("native RSL-RL TensorDict + timeout forwarding PASS; learner bootstrap outside scope")
         print("T12 PASS", args.family, "mirror", args.mirror, "endpoint", args.endpoint)
     finally:
