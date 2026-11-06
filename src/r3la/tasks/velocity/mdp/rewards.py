@@ -1,3 +1,5 @@
+# Native managers resolve SceneEntityCfg defaults before term execution.
+# ruff: noqa: B008
 # Copyright (c) 2022-2026, The Isaac Lab Project Developers (https://github.com/isaac-sim/IsaacLab/blob/main/CONTRIBUTORS.md).
 # All rights reserved.
 #
@@ -9,20 +11,18 @@ from typing import TYPE_CHECKING
 
 import torch
 
-from isaaclab.managers import SceneEntityCfg, ManagerTermBase, RewardTermCfg
-from isaaclab.utils.math import wrap_to_pi
+from isaaclab.managers import ManagerTermBase, RewardTermCfg, SceneEntityCfg
+from isaaclab.utils.math import euler_xyz_from_quat, wrap_to_pi
+
+from .observations import terrain_relative_height
 
 if TYPE_CHECKING:
     from isaaclab.assets import Articulation
     from isaaclab.envs import ManagerBasedRLEnv
-    from isaaclab.assets import Articulation, RigidObject
-    from isaaclab.sensors import ContactSensor, RayCaster
+    from isaaclab.sensors import ContactSensor
 
 
-def joint_pos_target_l2(
-    env: ManagerBasedRLEnv, 
-    target: float, 
-    asset_cfg: SceneEntityCfg) -> torch.Tensor:
+def joint_pos_target_l2(env: ManagerBasedRLEnv, target: float, asset_cfg: SceneEntityCfg) -> torch.Tensor:
     """Penalize joint position deviation from a target value."""
     # extract the used quantities (to enable type-hinting)
     asset: Articulation = env.scene[asset_cfg.name]
@@ -32,21 +32,20 @@ def joint_pos_target_l2(
     return torch.sum(torch.square(joint_pos - target), dim=1)
 
 
-def joint_deviation_l2(
-    env: ManagerBasedRLEnv,
-    asset_cfg: SceneEntityCfg) -> torch.Tensor:
+def joint_deviation_l2(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg) -> torch.Tensor:
     asset = env.scene[asset_cfg.name]
     """Penalize joint position deviation from default value."""
     return torch.sum(
-        torch.square(asset.data.joint_pos.torch[:, asset_cfg.joint_ids] - asset.data.default_joint_pos.torch[:, asset_cfg.joint_ids]),
+        torch.square(
+            asset.data.joint_pos.torch[:, asset_cfg.joint_ids]
+            - asset.data.default_joint_pos.torch[:, asset_cfg.joint_ids]
+        ),
         dim=1,
     )
 
-def joint_power(
-    env: ManagerBasedRLEnv,
-    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
-    """Penalize absolute mechanical joint power.
-    """
+
+def joint_power(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg = SceneEntityCfg("robot")) -> torch.Tensor:
+    """Penalize absolute mechanical joint power."""
     asset = env.scene[asset_cfg.name]
 
     joint_torque = asset.data.applied_torque.torch[:, asset_cfg.joint_ids]
@@ -58,80 +57,57 @@ def joint_power(
     )
 
 
+def _roll_pitch(env, asset_cfg=SceneEntityCfg("robot")):
+    roll, pitch, _ = euler_xyz_from_quat(env.scene[asset_cfg.name].data.root_quat_w.torch)
+    return wrap_to_pi(roll), wrap_to_pi(pitch)
+
+
+def base_height_l2(env, target_height: float = 0.4):
+    height, valid = terrain_relative_height(env)
+    return torch.where(valid, (height - target_height).square(), 0.0).squeeze(-1)
+
+
+def flat_orientation_l2(env, asset_cfg=SceneEntityCfg("robot")):
+    roll, pitch = _roll_pitch(env, asset_cfg)
+    return roll.square() + pitch.square()
+
+
+def undesired_contacts(env, threshold: float, sensor_cfg: SceneEntityCfg):
+    history = env.scene[sensor_cfg.name].data.net_normal_forces_w_history.torch[:, :, sensor_cfg.body_ids]
+    return (torch.linalg.vector_norm(history, dim=-1).amax(dim=1) > threshold).sum(dim=1).float()
+
+
+def feet_air_time(env, sensor_cfg: SceneEntityCfg, threshold: float = 0.5):
+    sensor = env.scene[sensor_cfg.name]
+    first = sensor.compute_first_contact(env.step_dt).torch[:, sensor_cfg.body_ids]
+    last = sensor.data.last_air_time.torch[:, sensor_cfg.body_ids]
+    return ((last - threshold) * first).sum(dim=1)
+
+
 def stance_base_height_orientation_exp(
-    env: ManagerBasedRLEnv,
+    env,
     target_height: float,
     sigma_h: float,
     sigma_o: float,
-    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
-    sensor_cfg: SceneEntityCfg | None = None,
-    contact_sensor_cfg: SceneEntityCfg = SceneEntityCfg("contact_forces"),
+    asset_cfg=SceneEntityCfg("robot"),
+    contact_sensor_cfg=SceneEntityCfg("contact_forces", body_names=".*foot"),
     command_name: str = "base_velocity",
     command_threshold: float = 0.1,
     contact_threshold: float = 1.0,
-) -> torch.Tensor:
-    """Reward static stance for base height and orientation using exp kernel
-    when robot's all feet in contact and low command velocity.
-
-    Returns:
-        Tensor of shape (num_envs,).
-    """
-    asset = env.scene[asset_cfg.name]
-
-    if sensor_cfg is not None:
-        sensor: RayCaster = env.scene[sensor_cfg.name]
-        ray_z = sensor.data.ray_hits_w.torch[..., 2]
-
-        # Adjust the target height using the sensor data, ignoring rays that missed the terrain
-        ray_hits_z = sensor.data.ray_hits_w.torch[..., 2]
-        finite_hits = torch.isfinite(ray_hits_z)
-        safe_hits = torch.where(finite_hits, ray_hits_z, torch.zeros_like(ray_hits_z))
-        hit_count = finite_hits.sum(dim=1).clamp(min=1)
-        terrain_height = safe_hits.sum(dim=1) / hit_count
-        adjusted_target_height = target_height + terrain_height
-    else:
-       # Use the provided target height directly for flat terrain
-       adjusted_target_height = target_height
-
-    # Base height error.
-    height = asset.data.root_pos_w.torch[:, 2]
-    height_error = torch.abs(height - adjusted_target_height)
-
-    # Base orientation error
-    gravity_b = asset.data.projected_gravity_b.torch
-    orientation_error = torch.atan2(
-        torch.linalg.vector_norm(gravity_b[:, :2], dim=1),
-        -gravity_b[:, 2],
+):
+    """S25/S67 static stance, using valid critic heights and world Euler angles."""
+    height, valid = terrain_relative_height(env)
+    roll, pitch = _roll_pitch(env, asset_cfg)
+    forces = env.scene[contact_sensor_cfg.name].data.net_normal_forces_w.torch[:, contact_sensor_cfg.body_ids]
+    contact = (torch.linalg.vector_norm(forces, dim=-1) > contact_threshold).all(dim=1)
+    command = env.command_manager.get_command(command_name)
+    low = (torch.linalg.vector_norm(command[:, :2], dim=1) < command_threshold) & (
+        command[:, 2].abs() < command_threshold
     )
-
-    # All four feet must be in contact.
-    contact_sensor = env.scene[contact_sensor_cfg.name]
-    foot_forces = contact_sensor.data.net_normal_forces_w.torch[:, contact_sensor_cfg.body_ids, :]
-
-    all_feet_contact = (
-        torch.linalg.vector_norm(foot_forces, dim=-1)
-        > contact_threshold
-    ).all(dim=1)
-
-    # Low commanded velocity.
-    commands = env.command_manager.get_command(command_name)
-
-    low_command = (
-        torch.linalg.vector_norm(commands[:, :2], dim=1)
-        < command_threshold
-    ) & (
-        torch.abs(commands[:, 2]) < command_threshold
+    reward = torch.exp(-(height[:, 0] - target_height).abs() / sigma_h) * torch.exp(
+        -torch.sqrt(roll.square() + pitch.square()) / sigma_o
     )
-
-    # Static stance indicator.
-    stance = all_feet_contact & low_command
-
-    reward = (
-        torch.exp(-height_error / sigma_h)
-        * torch.exp(-orientation_error / sigma_o)
-    )
-
-    return reward * stance.float()
+    return torch.where(valid[:, 0] & contact & low, reward, 0.0)
 
 
 def feet_stumble(
@@ -164,6 +140,7 @@ def feet_stumble(
     # Sum over feet: (num_envs,)
     return torch.sum(stumble.float(), dim=1)
 
+
 class action_smoothness_l2(ManagerTermBase):
     """Penalize the second-order difference of actions."""
 
@@ -178,19 +155,11 @@ class action_smoothness_l2(ManagerTermBase):
         # Store action from two steps ago.
         self.prev_prev_action = torch.zeros_like(actions)
 
-        # Number of valid action samples in each episode.
-        self.history_count = torch.zeros(
-            env.num_envs,
-            dtype=torch.long,
-            device=env.device,
-        )
-
     def reset(self, env_ids: torch.Tensor | None = None):
         if env_ids is None:
             env_ids = slice(None)
 
         self.prev_prev_action[env_ids] = 0.0
-        self.history_count[env_ids] = 0
 
     def __call__(
         self,
@@ -200,23 +169,11 @@ class action_smoothness_l2(ManagerTermBase):
         prev_action = env.action_manager.prev_action
 
         # Second-order action difference.
-        diff = (
-            action
-            - 2.0 * prev_action
-            + self.prev_prev_action
-        )
+        diff = action - 2.0 * prev_action + self.prev_prev_action
 
         reward = torch.sum(torch.square(diff), dim=1)
 
-        # Disable penalty until 3 actions are available.
-        reward = torch.where(
-            self.history_count >= 2,
-            reward,
-            torch.zeros_like(reward),
-        )
-
         # Update history for the next step.
         self.prev_prev_action.copy_(prev_action)
-        self.history_count.add_(1)
 
         return reward

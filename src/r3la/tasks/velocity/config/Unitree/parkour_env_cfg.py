@@ -9,6 +9,7 @@
 
 import math
 from dataclasses import MISSING
+from os import replace
 
 from isaaclab.envs.mdp import last_action
 from isaaclab_newton.physics import (
@@ -33,13 +34,11 @@ from isaaclab.managers import SceneEntityCfg
 from isaaclab.managers import TerminationTermCfg as DoneTerm
 from isaaclab.physics import PhysxAutoCfg
 from isaaclab.scene import InteractiveSceneCfg
-from isaaclab.sensors import CameraCfg, ContactSensorCfg, RayCasterCfg, patterns
-from isaaclab.markers.config import RAY_CASTER_MARKER_CFG
+from isaaclab.sensors import ContactSensorCfg, patterns
 from isaaclab.sim import SimulationCfg
-from isaaclab_newton.renderers import NewtonWarpRendererCfg
 from isaaclab.terrains import TerrainImporterCfg
 from isaaclab.terrains.config.rough import ROUGH_TERRAINS_CFG
-from isaaclab.utils import configclass, replace
+from isaaclab.utils import configclass
 from isaaclab.utils.assets import ISAAC_NUCLEUS_DIR, ISAACLAB_NUCLEUS_DIR
 from isaaclab.utils.noise import UniformNoiseCfg as Unoise
 
@@ -51,15 +50,15 @@ from isaaclab_tasks.utils import PresetCfg
 
 
 import r3la.tasks.velocity.mdp as mdp
+from r3la.labs.sensors import BaseYawHeightScannerCfg, HeldDepthCameraCfg
 from r3la.labs.terrains import PARKOUR_TERRAINS_CFG
+from r3la.labs.terrains.terrain_importer import ParkourTerrainImporter
 # UNITREE_GO2_CFG.init_state.pos is (0, 0, 0.4) -- the asset's own authored standing height.
 from isaaclab_assets.robots.unitree import UNITREE_GO2_CFG
 
 
 _GO2_STANDING_HEIGHT = 0.4
-_HEIGHT_SCANNER_DEBUG_VIS = True
-_FOOT_HEIGHT_SCANNER_OFFSET = 0.5
-_OBSERVATION_HISTORY_LENGTH = 4
+_OBSERVATION_HISTORY_LENGTH = 5
 _SYMMETRY_JOINT_NAMES = ['FL_hip_joint', 'FL_thigh_joint', 'FL_calf_joint', 
                          'FR_hip_joint', 'FR_thigh_joint', 'FR_calf_joint', 
                          'RL_hip_joint', 'RL_thigh_joint', 'RL_calf_joint', 
@@ -110,6 +109,7 @@ class ParkourSceneCfg(InteractiveSceneCfg):
         prim_path="/World/ground",
         terrain_type="generator",
         terrain_generator=PARKOUR_TERRAINS_CFG,
+        class_type=ParkourTerrainImporter,
         max_init_terrain_level=5,
         collision_group=-1,
         physics_material=sim_utils.PhysxRigidBodyMaterialCfg(
@@ -129,135 +129,42 @@ class ParkourSceneCfg(InteractiveSceneCfg):
     robot: ArticulationCfg = UNITREE_GO2_CFG.replace(
         prim_path="{ENV_REGEX_NS}/Robot"
     )
-    # sensors: the concrete implementation is selected automatically from the active physics backend;
-    # backend-specific fields such as ``global_world_only`` are ignored by the backends that do not use them
-    front_camera = CameraCfg(
-            prim_path="{ENV_REGEX_NS}/Robot/base/front_camera",
-            update_period=0.1,
-            height=240,
-            width=320,
-            data_types=["rgb", "distance_to_image_plane"],
-            spawn=sim_utils.PinholeCameraCfg(
-                focal_length=24.0, focus_distance=400.0, horizontal_aperture=20.955, clipping_range=(0.1, 1.0e5)
-            ),
-            offset=CameraCfg.OffsetCfg(pos=(0.0, 0.0, 0.015), rot=(0.0, 0.0, 0.0, 0.0), convention="ros"),
-            renderer_cfg=NewtonWarpRendererCfg()
-        )
-    terrain_height_scanner = RayCasterCfg(
-        prim_path="{ENV_REGEX_NS}/Robot/base",
-        offset=RayCasterCfg.OffsetCfg(pos=(0.0, 0.0, 20.0)),
-        ray_alignment="yaw",
-        pattern_cfg=patterns.GridPatternCfg(resolution=0.1, size=[1.6, 1.0]),
-        debug_vis=_HEIGHT_SCANNER_DEBUG_VIS,
-        visualizer_cfg=replace(
-            RAY_CASTER_MARKER_CFG, 
-            prim_path="/Visuals/terrain_height_scanner",
-            markers={
-                    "hit": sim_utils.SphereCfg(
-                        radius=0.04,
-                        visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(1.0, 0.0, 0.0)),
-                    ),
-                },
-        ),
-        mesh_prim_paths=["/World/ground"],
-        global_world_only=True,
+    # Native capture clocks; target sensors are read only through the aligned bundle.
+    front_camera = HeldDepthCameraCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/base/front_camera",
+        data_types=["rgb", "distance_to_image_plane"],
     )
-    body_height_scanner = RayCasterCfg(
+    terrain_height_scanner = BaseYawHeightScannerCfg(
         prim_path="{ENV_REGEX_NS}/Robot/base",
-        offset=RayCasterCfg.OffsetCfg(pos=(0.0, 0.0, 0.0)),
-        ray_alignment="yaw",
-        pattern_cfg=patterns.GridPatternCfg(resolution=0.05, size=[1.05, 0.6]),
-        debug_vis=_HEIGHT_SCANNER_DEBUG_VIS,
-        visualizer_cfg=replace(
-            RAY_CASTER_MARKER_CFG, 
-            prim_path="/Visuals/terrain_height_scanner",
-            markers={
-                    "hit": sim_utils.SphereCfg(
-                        radius=0.02,
-                        visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 1.0, 0.0)),
-                    ),
-                },
-        ),
-        mesh_prim_paths=["/World/ground"],
-        global_world_only=True,
+        heading_prim_path="{ENV_REGEX_NS}/Robot/base",
+        update_period=0.02,
+        pattern_cfg=patterns.GridPatternCfg(resolution=0.1, size=(1.6, 1.0), ordering="xy"),
     )
-    fl_height_scanner = RayCasterCfg(
-            prim_path="{ENV_REGEX_NS}/Robot/FL_foot",
-            offset=RayCasterCfg.OffsetCfg(pos=(0.0, 0.0, _FOOT_HEIGHT_SCANNER_OFFSET)),
-            ray_alignment="yaw",
-            pattern_cfg=patterns.GridPatternCfg(resolution=0.05, size=[0.2, 0.2]),
-            debug_vis=_HEIGHT_SCANNER_DEBUG_VIS,
-            visualizer_cfg=replace(
-                RAY_CASTER_MARKER_CFG, 
-                prim_path="/Visuals/fl_height_scanner",
-                markers={
-                        "hit": sim_utils.SphereCfg(
-                            radius=0.02,
-                            visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 0.0, 1.0)),
-                        ),
-                    },
-            ),
-            mesh_prim_paths=["/World/ground"],
-            global_world_only=True,
-        )
-    fr_height_scanner = RayCasterCfg(
-            prim_path="{ENV_REGEX_NS}/Robot/FR_foot",
-            offset=RayCasterCfg.OffsetCfg(pos=(0.0, 0.0, _FOOT_HEIGHT_SCANNER_OFFSET)),
-            ray_alignment="yaw",
-            pattern_cfg=patterns.GridPatternCfg(resolution=0.05, size=[0.2, 0.2]),
-            debug_vis=_HEIGHT_SCANNER_DEBUG_VIS,
-            visualizer_cfg=replace(
-                RAY_CASTER_MARKER_CFG, 
-                prim_path="/Visuals/fr_height_scanner",
-                markers={
-                        "hit": sim_utils.SphereCfg(
-                            radius=0.02,
-                            visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 0.0, 1.0)),
-                        ),
-                    },
-            ),
-            mesh_prim_paths=["/World/ground"],
-            global_world_only=True,
-        )
-    rl_height_scanner = RayCasterCfg(
-            prim_path="{ENV_REGEX_NS}/Robot/RL_foot",
-            offset=RayCasterCfg.OffsetCfg(pos=(0.0, 0.0, _FOOT_HEIGHT_SCANNER_OFFSET)),
-            ray_alignment="yaw",
-            pattern_cfg=patterns.GridPatternCfg(resolution=0.05, size=[0.2, 0.2]),
-            debug_vis=_HEIGHT_SCANNER_DEBUG_VIS,
-            visualizer_cfg=replace(
-                RAY_CASTER_MARKER_CFG, 
-                prim_path="/Visuals/rl_height_scanner",
-                markers={
-                        "hit": sim_utils.SphereCfg(
-                            radius=0.02,
-                            visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 0.0, 1.0)),
-                        ),
-                    },
-            ),
-            mesh_prim_paths=["/World/ground"],
-            global_world_only=True,
-        )
-    rr_height_scanner = RayCasterCfg(
-            prim_path="{ENV_REGEX_NS}/Robot/RR_foot",
-            offset=RayCasterCfg.OffsetCfg(pos=(0.0, 0.0, _FOOT_HEIGHT_SCANNER_OFFSET)),
-            ray_alignment="yaw",
-            pattern_cfg=patterns.GridPatternCfg(resolution=0.05, size=[0.2, 0.2]),
-            debug_vis=_HEIGHT_SCANNER_DEBUG_VIS,
-            visualizer_cfg=replace(
-                RAY_CASTER_MARKER_CFG, 
-                prim_path="/Visuals/rr_height_scanner",
-                markers={
-                        "hit": sim_utils.SphereCfg(
-                            radius=0.02,
-                            visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 0.0, 1.0)),
-                        ),
-                    },
-            ),
-            mesh_prim_paths=["/World/ground"],
-            global_world_only=True,
-        )
-    contact_forces = ContactSensorCfg(prim_path="{ENV_REGEX_NS}/Robot/[^/]*", history_length=3, track_air_time=True)
+    body_height_scanner = BaseYawHeightScannerCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/base",
+        heading_prim_path="{ENV_REGEX_NS}/Robot/base",
+        pattern_cfg=patterns.GridPatternCfg(resolution=0.05, size=(1.05, 0.6), ordering="xy"),
+    )
+    fl_height_scanner = BaseYawHeightScannerCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/FL_foot",
+        heading_prim_path="{ENV_REGEX_NS}/Robot/base",
+    )
+    fr_height_scanner = BaseYawHeightScannerCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/FR_foot",
+        heading_prim_path="{ENV_REGEX_NS}/Robot/base",
+    )
+    rl_height_scanner = BaseYawHeightScannerCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/RL_foot",
+        heading_prim_path="{ENV_REGEX_NS}/Robot/base",
+    )
+    rr_height_scanner = BaseYawHeightScannerCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/RR_foot",
+        heading_prim_path="{ENV_REGEX_NS}/Robot/base",
+    )
+    contact_forces = ContactSensorCfg(
+        prim_path="{ENV_REGEX_NS}/Robot/[^/]*", history_length=4, track_air_time=True,
+        track_contact_points=True, filter_shape_prim_expr=["/World/ground/terrain/mesh"],
+    )
     # lights
     sky_light = AssetBaseCfg(
         prim_path="/World/skyLight",
@@ -277,18 +184,7 @@ class ParkourSceneCfg(InteractiveSceneCfg):
 class CommandsCfg:
     """Command specifications for the MDP."""
 
-    base_velocity = mdp.UniformVelocityCommandCfg(
-        asset_name="robot",
-        resampling_time_range=(10.0, 10.0),
-        rel_standing_envs=0.02,
-        rel_heading_envs=1.0,
-        heading_command=True,
-        heading_control_stiffness=0.5,
-        debug_vis=True,
-        ranges=mdp.UniformVelocityCommandCfg.Ranges(
-            lin_vel_x=(-1.0, 1.0), lin_vel_y=(-1.0, 1.0), ang_vel_z=(-1.0, 1.0), heading=(-math.pi, math.pi)
-        ),
-    )
+    base_velocity = mdp.ParkourVelocityCommandCfg(resampling_time_range=(20.02, 20.02))
 
 
 @configclass
@@ -300,7 +196,8 @@ class ActionsCfg:
             joint_names=_SYMMETRY_JOINT_NAMES, 
             scale=0.5,
             preserve_order=True, 
-            use_default_offset=True
+            use_default_offset=True,
+            clip=None,
         )
 
 
@@ -312,38 +209,12 @@ class ObservationsCfg:
     class TargetCfg(ObsGroup):
         """Observations for reconstruction target."""
 
-        ### Body and foot heightmap
-        body_height_scan = ObsTerm(
-            func=mdp.height_scan,
-            params={"sensor_cfg": SceneEntityCfg("body_height_scanner"), "offset": 0.0},
-            clip=(-1.0, 1.0),
-        )
-        lf_height_scan = ObsTerm(
-            func=mdp.height_scan,
-            params={"sensor_cfg": SceneEntityCfg("fl_height_scanner"), "offset": _FOOT_HEIGHT_SCANNER_OFFSET},
-            clip=(-1.0, 1.0),
-        )
-        rf_height_scan = ObsTerm(
-            func=mdp.height_scan,
-            params={"sensor_cfg": SceneEntityCfg("fr_height_scanner"), "offset": _FOOT_HEIGHT_SCANNER_OFFSET},
-            clip=(-1.0, 1.0),
-        )
-        lh_height_scan = ObsTerm(
-            func=mdp.height_scan,
-            params={"sensor_cfg": SceneEntityCfg("rl_height_scanner"), "offset": _FOOT_HEIGHT_SCANNER_OFFSET},
-            clip=(-1.0, 1.0),
-        )
-        rh_height_scan = ObsTerm(
-            func=mdp.height_scan,
-            params={"sensor_cfg": SceneEntityCfg("rr_height_scanner"), "offset": _FOOT_HEIGHT_SCANNER_OFFSET},
-            clip=(-1.0, 1.0),
-        )
-        ### depth image
-        depth_image = ObsTerm(
-            func=mdp.image_depth,
-            params={"sensor_cfg": SceneEntityCfg("front_camera")},
-
-        )
+        body_height_scan = ObsTerm(func=mdp.low_rate_target, params={"key": "body_height_scan"})
+        lf_height_scan = ObsTerm(func=mdp.low_rate_target, params={"key": "lf_height_scan"})
+        rf_height_scan = ObsTerm(func=mdp.low_rate_target, params={"key": "rf_height_scan"})
+        lh_height_scan = ObsTerm(func=mdp.low_rate_target, params={"key": "lh_height_scan"})
+        rh_height_scan = ObsTerm(func=mdp.low_rate_target, params={"key": "rh_height_scan"})
+        depth_image = ObsTerm(func=mdp.low_rate_target, params={"key": "depth_image"})
 
         def __post_init__(self):
             self.enable_corruption = False
@@ -361,10 +232,14 @@ class ObservationsCfg:
             noise=Unoise(n_min=-0.05, n_max=0.05),
         )
         joint_pos = ObsTerm(func=mdp.joint_pos_rel, 
-                            params={"asset_cfg": SceneEntityCfg("robot", joint_names=_SYMMETRY_JOINT_NAMES)},
+                            params={"asset_cfg": SceneEntityCfg(
+                                "robot", joint_names=_SYMMETRY_JOINT_NAMES, preserve_order=True
+                            )},
                             noise=Unoise(n_min=-0.01, n_max=0.01))
         joint_vel = ObsTerm(func=mdp.joint_vel_rel, 
-                            params={"asset_cfg": SceneEntityCfg("robot", joint_names=_SYMMETRY_JOINT_NAMES)},
+                            params={"asset_cfg": SceneEntityCfg(
+                                "robot", joint_names=_SYMMETRY_JOINT_NAMES, preserve_order=True
+                            )},
                             noise=Unoise(n_min=-1.5, n_max=1.5))
         last_actions = ObsTerm(func=mdp.last_action)
 
@@ -389,13 +264,16 @@ class ObservationsCfg:
         """Observations for privileged group"""
 
         # observation terms
-        thigh_contact = ObsTerm(
+        leg_contacts = ObsTerm(
             func=mdp.is_contact,
-            params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=["FL_thigh", "FR_thigh","RL_thigh", "RR_thigh"], preserve_order=True), "threshold": 1.0}
+            params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=["FL_thigh", "FR_thigh", "RL_thigh", "RR_thigh",
+                        "FL_calf", "FR_calf", "RL_calf", "RR_calf"], preserve_order=True), "threshold": 1.0}
         )
         actuator_gains = ObsTerm(
              func=mdp.actuator_gains,
-             params={"asset_cfg": SceneEntityCfg("robot", joint_names=_SYMMETRY_JOINT_NAMES)},
+             params={"asset_cfg": SceneEntityCfg(
+                 "robot", joint_names=_SYMMETRY_JOINT_NAMES, preserve_order=True
+             )},
         )
         com_offsets = ObsTerm(
              func=mdp.com_offset,
@@ -419,8 +297,7 @@ class ObservationsCfg:
              func=mdp.base_lin_vel
         )
         base_ang_vel = ObsTerm(
-            func=mdp.base_ang_vel, 
-            noise=Unoise(n_min=-0.2, n_max=0.2)
+            func=mdp.base_ang_vel,
         )
         projected_gravity = ObsTerm(
             func=mdp.projected_gravity,
@@ -431,17 +308,21 @@ class ObservationsCfg:
         )
         joint_pos = ObsTerm(
             func=mdp.joint_pos_rel, 
-            params={"asset_cfg": SceneEntityCfg("robot", joint_names=_SYMMETRY_JOINT_NAMES)},
+            params={"asset_cfg": SceneEntityCfg(
+                "robot", joint_names=_SYMMETRY_JOINT_NAMES, preserve_order=True
+            )},
         )
         joint_vel = ObsTerm(
             func=mdp.joint_vel_rel, 
-            params={"asset_cfg": SceneEntityCfg("robot", joint_names=_SYMMETRY_JOINT_NAMES)},
+            params={"asset_cfg": SceneEntityCfg(
+                "robot", joint_names=_SYMMETRY_JOINT_NAMES, preserve_order=True
+            )},
         )
         last_action = ObsTerm(
              func=mdp.last_action
         )
         terrain_height = ObsTerm(
-             func=mdp.height_scan,
+             func=mdp.metric_height_scan,
              params={"sensor_cfg": SceneEntityCfg("terrain_height_scanner")}
         )
 
@@ -451,10 +332,51 @@ class ObservationsCfg:
             self.concatenate_terms = True
 
     
+    @configclass
+    class MetadataCfg(ObsGroup):
+        """Per-row capture identity, timing and spatial masks; no noise/history."""
+
+        episode_id = ObsTerm(func=mdp.sensor_metadata, params={"key": "episode_id"})
+        low_rate_capture_time = ObsTerm(func=mdp.sensor_metadata, params={"key": "low_rate_capture_time"})
+        low_rate_age = ObsTerm(func=mdp.sensor_metadata, params={"key": "low_rate_age"})
+        low_rate_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "low_rate_valid"})
+        depth_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "depth_valid"})
+        body_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "body_height_valid"})
+        lf_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "lf_height_valid"})
+        rf_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "rf_height_valid"})
+        lh_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "lh_height_valid"})
+        rh_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "rh_height_valid"})
+        base_height_valid = ObsTerm(func=mdp.amp_field, params={"key": "base_height_valid"})
+        critic_height_valid = ObsTerm(func=mdp.sensor_metadata, params={"key": "critic_height_valid"})
+
+        def __post_init__(self):
+            self.enable_corruption = False
+            self.concatenate_terms = False
+
+    @configclass
+    class AmpCfg(ObsGroup):
+        """Clean current physical fields for downstream AMP feature construction."""
+
+        base_pos_w = ObsTerm(func=mdp.amp_field, params={"key": "base_pos_w"})
+        base_quat_w = ObsTerm(func=mdp.amp_field, params={"key": "base_quat_w"})
+        base_lin_vel_b = ObsTerm(func=mdp.amp_field, params={"key": "base_lin_vel_b"})
+        base_ang_vel_b = ObsTerm(func=mdp.amp_field, params={"key": "base_ang_vel_b"})
+        joint_pos = ObsTerm(func=mdp.amp_field, params={"key": "joint_pos", "asset_cfg": SceneEntityCfg("robot", joint_names=_SYMMETRY_JOINT_NAMES, preserve_order=True)})
+        joint_vel = ObsTerm(func=mdp.amp_field, params={"key": "joint_vel", "asset_cfg": SceneEntityCfg("robot", joint_names=_SYMMETRY_JOINT_NAMES, preserve_order=True)})
+        foot_pos_b = ObsTerm(func=mdp.amp_field, params={"key": "foot_pos_b", "asset_cfg": SceneEntityCfg("robot", body_names=["FL_foot", "FR_foot", "RL_foot", "RR_foot"], preserve_order=True)})
+        base_height = ObsTerm(func=mdp.amp_field, params={"key": "base_height"})
+        base_height_valid = ObsTerm(func=mdp.amp_field, params={"key": "base_height_valid"})
+
+        def __post_init__(self):
+            self.enable_corruption = False
+            self.concatenate_terms = False
+
     # observation groups
     proprio: PropriceptionCfg = PropriceptionCfg()
     commands: CommandObsCfg = CommandObsCfg()
     target: TargetCfg = TargetCfg()
+    amp: AmpCfg = AmpCfg()
+    metadata: MetadataCfg = MetadataCfg()
     privilege: PrivilegCfg = PrivilegCfg()
 
 
@@ -469,7 +391,7 @@ class EventsCfg:
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=".*foot"),
             "static_friction_range": (0.4, 1.2),
-            "dynamic_friction_range": (0.3, 1.0),
+            "dynamic_friction_range": (0.4, 1.2),
             "restitution_range": (0.0, 0.1),
             "num_buckets": 64,
             "make_consistent": True,
@@ -497,49 +419,22 @@ class EventsCfg:
         }
     )
 
-    # reset
-    base_external_force_torque = EventTerm(
-        func=mdp.apply_external_force_torque,
-        mode="reset",
+    actuator_gains = EventTerm(
+        func=mdp.randomize_actuator_gains,
+        mode="startup",
         params={
-            "asset_cfg": SceneEntityCfg("robot", body_names="base"),
-            "force_range": (0.0, 0.0),
-            "torque_range": (-0.0, 0.0),
+            "asset_cfg": SceneEntityCfg("robot", joint_names=_SYMMETRY_JOINT_NAMES, preserve_order=True),
+            "stiffness_distribution_params": (0.8, 1.2),
+            "damping_distribution_params": (0.8, 1.2),
+            "operation": "scale",
+            "distribution": "uniform",
         },
     )
 
-    reset_base = EventTerm(
-        func=mdp.reset_root_state_uniform,
-        mode="reset",
-        params={
-            "pose_range": {"x": (-0.5, 0.5), "y": (-0.5, 0.5), "yaw": (-3.14, 3.14)},
-            "velocity_range": {
-                "x": (-0.5, 0.5),
-                "y": (-0.5, 0.5),
-                "z": (-0.5, 0.5),
-                "roll": (-0.5, 0.5),
-                "pitch": (-0.5, 0.5),
-                "yaw": (-0.5, 0.5),
-            },
-        },
-    )
-
-    reset_robot_joints = EventTerm(
-        func=mdp.reset_joints_by_scale,
-        mode="reset",
-        params={
-            "position_range": (0.5, 1.5),
-            "velocity_range": (0.0, 0.0),
-        },
-    )
+    reset_base = EventTerm(func=mdp.reset_parkour_state, mode="reset")
 
     # interval
-    push_robot = EventTerm(
-        func=mdp.push_by_setting_velocity,
-        mode="interval",
-        interval_range_s=(10.0, 15.0),
-        params={"velocity_range": {"x": (-0.5, 0.5), "y": (-0.5, 0.5)}},
-    )
+    push_robot = None
 
 
 @configclass
@@ -565,7 +460,7 @@ class RewardsCfg:
         params={"target_height": _GO2_STANDING_HEIGHT,
                 "sigma_h": 0.1,
                 "sigma_o": 0.1,
-                "sensor_cfg": SceneEntityCfg("terrain_height_scanner")
+                "contact_sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*foot")
         }
     )
     # -- auxilary rewards
@@ -574,7 +469,6 @@ class RewardsCfg:
         weight=0.5,
         params={
             "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*foot"),
-            "command_name": "base_velocity",
             "threshold": 0.5,
         },
     )
@@ -599,7 +493,7 @@ class RewardsCfg:
     undesired_contacts = RewTerm(
         func=mdp.undesired_contacts,
         weight=-1.0,
-        params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=[".*THIGH", ".*CALF"]), "threshold": 1.0},
+        params={"sensor_cfg": SceneEntityCfg("contact_forces", body_names=[".*_thigh", ".*_calf"]), "threshold": 1.0},
     )
     feet_stumble = RewTerm(
         func=mdp.feet_stumble,
@@ -642,6 +536,7 @@ class RewardsCfg:
 class TerminationsCfg:
     """Termination terms for the MDP."""
 
+    parkour_attempt = DoneTerm(func=mdp.ParkourAttemptState)
     time_out = DoneTerm(func=mdp.time_out, time_out=True)
     base_contact = DoneTerm(
         func=mdp.illegal_contact,
@@ -653,10 +548,7 @@ class TerminationsCfg:
 class CurriculumCfg:
     """Curriculum terms for the MDP."""
 
-    terrain_levels = CurrTerm(
-        func=mdp.terrain_levels_vel
-    )
-    #TODO:add success rate adaptive curriculum
+    terrain_levels = CurrTerm(func=mdp.ParkourCurriculum)
 
 
 ##
@@ -687,6 +579,8 @@ class UnitreeGo2ParkourEnvCfg(ManagerBasedRLEnvCfg):
         # general settings
         self.decimation = 4
         self.episode_length_s = 20.0
+        self.is_finite_horizon = False
+        self.compute_final_obs = False
         # simulation settings
         self.sim.dt = 0.005
         self.sim.render_interval = self.decimation
@@ -696,15 +590,15 @@ class UnitreeGo2ParkourEnvCfg(ManagerBasedRLEnvCfg):
         if self.scene.terrain_height_scanner is not None:
             self.scene.terrain_height_scanner.update_period = self.decimation * self.sim.dt
         if self.scene.body_height_scanner is not None:
-                self.scene.body_height_scanner.update_period = self.decimation * self.sim.dt
+                self.scene.body_height_scanner.update_period = 0.1
         if self.scene.fl_height_scanner is not None:
-                self.scene.fl_height_scanner.update_period = self.decimation * self.sim.dt
+                self.scene.fl_height_scanner.update_period = 0.1
         if self.scene.fr_height_scanner is not None:
-                self.scene.fr_height_scanner.update_period = self.decimation * self.sim.dt
+                self.scene.fr_height_scanner.update_period = 0.1
         if self.scene.rl_height_scanner is not None:
-                self.scene.rl_height_scanner.update_period = self.decimation * self.sim.dt
+                self.scene.rl_height_scanner.update_period = 0.1
         if self.scene.rr_height_scanner is not None:
-                self.scene.rr_height_scanner.update_period = self.decimation * self.sim.dt
+                self.scene.rr_height_scanner.update_period = 0.1
         if self.scene.contact_forces is not None:
             self.scene.contact_forces.update_period = self.sim.dt
         if self.scene.front_camera is not None:
@@ -724,26 +618,6 @@ class UnitreeGo2ParkourEnvCfg(ManagerBasedRLEnvCfg):
         self.sim.use_newton_actuators = True
         # scene
         self.scene.terrain_height_scanner.prim_path = "{ENV_REGEX_NS}/Robot/base"
-        # scale down the terrains because the robot is small
-        terrains = self.scene.terrain.terrain_generator.sub_terrains
-        terrains["random_rough"].noise_range = (0.01, 0.06)
-        terrains["random_rough"].noise_step = 0.01
-        # actions
-        self.actions.joint_pos.scale = 0.25
-        # rewards
-        self.rewards.feet_air_time.params["sensor_cfg"].body_names = ".*_foot"
-        self.rewards.feet_air_time.weight = 0.01
-        self.rewards.undesired_contacts = None
-        self.rewards.dof_torques_l2.weight = -0.0002
-        self.rewards.track_lin_vel_xy_exp.weight = 1.5
-        self.rewards.track_ang_vel_z_exp.weight = 0.75
-        self.rewards.dof_acc_l2.weight = -2.5e-7
-        # base_height_l2: rough terrain, adjust target height using the height-scanner rays.
-        self.rewards.base_height_l2.weight = -30.0
-        self.rewards.base_height_l2.params["sensor_cfg"] = SceneEntityCfg("terrain_height_scanner")
-        # action_rate_l2: halved from the shared default of -0.01. The stronger penalty locked
-        # one hind foot into a low-amplitude, dragging gait on flat terrain with Newton.
-        self.rewards.action_rate_l2.weight = -0.005
         # terminations
         self.terminations.base_contact.params["sensor_cfg"].body_names = "base"
 
@@ -759,7 +633,7 @@ class UnitreeGo2ParkourEnvCfg(ManagerBasedRLEnvCfg):
         #             "/World/envs/env_[^/]+/Robot/base/front_camera"
         #         ),
         #         streaming_envs=4,
-        #         streaming_gt_types=["rgb"],
+        #         streaming_gt_types=["depth"],
         #         streaming_depth_min=0.1,
         #         streaming_depth_max=5.0,
         #     ),
@@ -776,15 +650,8 @@ class UnitreeGo2ParkourEnvCfg(ManagerBasedRLEnvCfg):
         # ]
 
     def play_mode(self):
-        """Play-mode overrides shared by the velocity-tracking environments."""
+        """Use deterministic S34 evaluation defaults; configure explicit cases via evaluation.py."""
+        from .evaluation import configure_parkour_evaluation
+
         super().play_mode()
-        # spawn the robot randomly in the grid (instead of their terrain levels)
-        self.scene.terrain.max_init_terrain_level = None
-        # reduce the number of terrains to save memory
-        if self.scene.terrain.terrain_generator is not None:
-            self.scene.terrain.terrain_generator.num_rows = 5
-            self.scene.terrain.terrain_generator.num_cols = 5
-            self.scene.terrain.terrain_generator.curriculum = False
-        # remove random pushing events
-        self.events.base_external_force_torque = None
-        self.events.push_robot = None
+        configure_parkour_evaluation(self)

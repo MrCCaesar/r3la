@@ -1,0 +1,83 @@
+[
+  {
+    "family": "box",
+    "level": 9,
+    "mirror": 1,
+    "canonical_id": "c8be6dd3e20511af79dddd86d0305063eee9b5b5115c7ef910900cf448f20d93",
+    "difficulty": 0.946793495284372,
+    "endpoint": false,
+    "log": ".scratch/issue_4/t12-eval-box.log"
+  },
+  {
+    "family": "gap",
+    "level": 9,
+    "mirror": 1,
+    "canonical_id": "acaaec1bafc73c2702c9575e74eaa6196ac6a44c37c828a923a1e18c4a975ddc",
+    "difficulty": 0.946793495284372,
+    "endpoint": false,
+    "log": ".scratch/issue_4/t12-eval-gap.log"
+  },
+  {
+    "family": "rough_grid",
+    "level": 9,
+    "mirror": 1,
+    "canonical_id": "92d33d40ea6a844454dc86c6c555cd8410fd0925f252032a58041b67ce4624ba",
+    "difficulty": 0.946793495284372,
+    "endpoint": false,
+    "log": ".scratch/issue_4/t12-eval-rough_grid.log"
+  },
+  {
+    "family": "side_slope",
+    "level": 9,
+    "mirror": -1,
+    "canonical_id": "a53862d6e23bd1785d6f6c65823f2df8d0da2645cf071789e719a1495451e1b6",
+    "difficulty": 0.946793495284372,
+    "endpoint": false,
+    "log": ".scratch/issue_4/t12-eval-side_slope-mirror.log"
+  },
+  {
+    "family": "side_slope",
+    "level": 9,
+    "mirror": 1,
+    "canonical_id": "a53862d6e23bd1785d6f6c65823f2df8d0da2645cf071789e719a1495451e1b6",
+    "difficulty": 0.946793495284372,
+    "endpoint": false,
+    "log": ".scratch/issue_4/t12-eval-side_slope.log"
+  },
+  {
+    "family": "stairs",
+    "level": 9,
+    "mirror": 1,
+    "canonical_id": "77f91bc20dd62d7621ea93e1713ec20164455de52e81795b2e32a12e12393bd4",
+    "difficulty": 1.0,
+    "endpoint": true,
+    "log": ".scratch/issue_4/t12-eval-stairs-d1.log"
+  },
+  {
+    "family": "stairs",
+    "level": 9,
+    "mirror": 1,
+    "canonical_id": "0ffe3e1b2eb45205bbc64282f6899bae72c843d322264a8c16a425292b2de32d",
+    "difficulty": 0.946793495284372,
+    "endpoint": false,
+    "log": ".scratch/issue_4/t12-eval-stairs.log"
+  },
+  {
+    "family": "tilted_stairs",
+    "level": 9,
+    "mirror": -1,
+    "canonical_id": "5f05478d71121799af160370c00e09238a05880f1206b896c3d6a11ac3ab586b",
+    "difficulty": 0.946793495284372,
+    "endpoint": false,
+    "log": ".scratch/issue_4/t12-eval-tilted_stairs-mirror.log"
+  },
+  {
+    "family": "tilted_stairs",
+    "level": 9,
+    "mirror": 1,
+    "canonical_id": "5f05478d71121799af160370c00e09238a05880f1206b896c3d6a11ac3ab586b",
+    "difficulty": 0.946793495284372,
+    "endpoint": false,
+    "log": ".scratch/issue_4/t12-eval-tilted_stairs.log"
+  }
+]

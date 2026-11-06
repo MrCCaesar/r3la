@@ -1,0 +1,79 @@
+[
+  {
+    "case": "sensors",
+    "command": [
+      "timeout",
+      "--kill-after=10s",
+      "150s",
+      "/home/sevnce-mr/r3la/.venv/bin/python",
+      "tests/parkour_sensors_smoke.py",
+      "--device",
+      "cuda:0",
+      "--viz",
+      "none"
+    ],
+    "exit_code": 1,
+    "ram_kib": 18639452,
+    "vram_mib": 7793,
+    "log": ".scratch/issue_4/verify-sensors.log"
+  },
+  {
+    "case": "sensors",
+    "command": [
+      "timeout",
+      "--kill-after=10s",
+      "150s",
+      "/home/sevnce-mr/r3la/.venv/bin/python",
+      "tests/parkour_sensors_smoke.py",
+      "--device",
+      "cuda:0",
+      "--viz",
+      "none"
+    ],
+    "exit_code": 0,
+    "ram_kib": 18561980,
+    "vram_mib": 7793,
+    "log": ".scratch/issue_4/verify-sensors.log"
+  },
+  {
+    "case": "dynamics",
+    "command": [
+      "timeout",
+      "--kill-after=10s",
+      "180s",
+      "/home/sevnce-mr/r3la/.venv/bin/python",
+      "tests/parkour_dynamics_smoke.py",
+      "--device",
+      "cuda:0",
+      "--viz",
+      "none"
+    ],
+    "exit_code": 0,
+    "ram_kib": 19010840,
+    "vram_mib": 7793,
+    "log": ".scratch/issue_4/verify-dynamics.log"
+  },
+  {
+    "case": "wrapper",
+    "command": [
+      "timeout",
+      "--kill-after=10s",
+      "150s",
+      "/home/sevnce-mr/r3la/.venv/bin/python",
+      "tests/parkour_evaluation_smoke.py",
+      "--family",
+      "box",
+      "--level",
+      "9",
+      "--wrapper",
+      "--device",
+      "cuda:0",
+      "--viz",
+      "none"
+    ],
+    "exit_code": 0,
+    "ram_kib": 19253060,
+    "vram_mib": 7793,
+    "log": ".scratch/issue_4/verify-wrapper.log"
+  }
+]

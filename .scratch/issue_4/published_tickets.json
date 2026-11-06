@@ -1,0 +1,178 @@
+{
+  "T01": {
+    "number": 5,
+    "url": "https://github.com/MrCCaesar/r3la/issues/5",
+    "title": "箱体地形生成、导入与入口重置",
+    "blockers": [],
+    "parent_linked": true,
+    "edges": [],
+    "id": 6218858185,
+    "node_id": "I_kwDOVQVjHs8AAAABcqw-yQ"
+  },
+  "T02": {
+    "number": 6,
+    "url": "https://github.com/MrCCaesar/r3la/issues/6",
+    "title": "箱体有效通过、落地确认与回合结束",
+    "blockers": [
+      "T01"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T01"
+    ],
+    "id": 6218859723,
+    "node_id": "I_kwDOVQVjHs8AAAABcqxEyw"
+  },
+  "T03": {
+    "number": 7,
+    "url": "https://github.com/MrCCaesar/r3la/issues/7",
+    "title": "沟壑跨越完整路径",
+    "blockers": [
+      "T02"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T02"
+    ],
+    "id": 6218862420,
+    "node_id": "I_kwDOVQVjHs8AAAABcqxPVA"
+  },
+  "T04": {
+    "number": 8,
+    "url": "https://github.com/MrCCaesar/r3la/issues/8",
+    "title": "普通阶梯完整路径",
+    "blockers": [
+      "T02"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T02"
+    ],
+    "id": 6218864978,
+    "node_id": "I_kwDOVQVjHs8AAAABcqxZUg"
+  },
+  "T05": {
+    "number": 9,
+    "url": "https://github.com/MrCCaesar/r3la/issues/9",
+    "title": "倾斜阶梯与匹配镜像",
+    "blockers": [
+      "T04"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T04"
+    ],
+    "id": 6218867127,
+    "node_id": "I_kwDOVQVjHs8AAAABcqxhtw"
+  },
+  "T06": {
+    "number": 10,
+    "url": "https://github.com/MrCCaesar/r3la/issues/10",
+    "title": "侧坡及镜像完整路径",
+    "blockers": [
+      "T02"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T02"
+    ],
+    "id": 6218868939,
+    "node_id": "I_kwDOVQVjHs8AAAABcqxoyw"
+  },
+  "T07": {
+    "number": 11,
+    "url": "https://github.com/MrCCaesar/r3la/issues/11",
+    "title": "随机岩石网格完整路径",
+    "blockers": [
+      "T02"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T02"
+    ],
+    "id": 6218870776,
+    "node_id": "I_kwDOVQVjHs8AAAABcqxv-A"
+  },
+  "T08": {
+    "number": 12,
+    "url": "https://github.com/MrCCaesar/r3la/issues/12",
+    "title": "共享本体历史与规范动作路径",
+    "blockers": [
+      "T01"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T01"
+    ],
+    "id": 6218872807,
+    "node_id": "I_kwDOVQVjHs8AAAABcqx35w"
+  },
+  "T09": {
+    "number": 13,
+    "url": "https://github.com/MrCCaesar/r3la/issues/13",
+    "title": "深度与高度扫描输出完整契约",
+    "blockers": [
+      "T01"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T01"
+    ],
+    "id": 6218874705,
+    "node_id": "I_kwDOVQVjHs8AAAABcqx_UQ"
+  },
+  "T10": {
+    "number": 14,
+    "url": "https://github.com/MrCCaesar/r3la/issues/14",
+    "title": "实际动力学参数、干净状态与奖励",
+    "blockers": [
+      "T08",
+      "T09"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T08",
+      "T09"
+    ],
+    "id": 6218876593,
+    "node_id": "I_kwDOVQVjHs8AAAABcqyGsQ"
+  },
+  "T11": {
+    "number": 15,
+    "url": "https://github.com/MrCCaesar/r3la/issues/15",
+    "title": "独立课程驱动下一次尝试",
+    "blockers": [
+      "T02"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T02"
+    ],
+    "id": 6218880525,
+    "node_id": "I_kwDOVQVjHs8AAAABcqyWDQ"
+  },
+  "T12": {
+    "number": 16,
+    "url": "https://github.com/MrCCaesar/r3la/issues/16",
+    "title": "六类任务集成与确定性评估交付",
+    "blockers": [
+      "T03",
+      "T05",
+      "T06",
+      "T07",
+      "T10",
+      "T11"
+    ],
+    "parent_linked": true,
+    "edges": [
+      "T03",
+      "T05",
+      "T06",
+      "T07",
+      "T10",
+      "T11"
+    ],
+    "id": 6218882357,
+    "node_id": "I_kwDOVQVjHs8AAAABcqydNQ"
+  }
+}

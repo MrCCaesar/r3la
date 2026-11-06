@@ -23,6 +23,10 @@ r3-la/
 ```
 
 ## Dependencies
+
+SWAP Go2 environment configuration, observations, deterministic evaluation and
+bounded checks are documented in [docs/parkour.md](docs/parkour.md).
+
 Current Use Isaaclab 3.0.0 version, which can be installed following [IsaacLab Installation](https://isaac-sim.github.io/IsaacLab/v3.0.0/source/isaaclab/installation.html)
 
 Adding custom learning library with [Adding your own learning library](https://isaac-sim.github.io/IsaacLab/v3.0.0/source/developer-tools/template_generator.html)

@@ -1,0 +1,280 @@
+{
+  "T01": {
+    "number": 5,
+    "title": "[SWAP T01] 箱体地形生成、导入与入口重置",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n注册任务能够使用指定箱体样本，从合法入口初始化 Go2，并通过原生 reset/step 运行有界检查；建立后续地形复用的已批准布局与导入链路。\n\n## Acceptance criteria\n\n- [ ] TerrainLayout、箱体 mesh、缓存命中/未命中、实际 difficulty 和世界变换一致；保留原生 meshes/origin 返回契约。\n- [ ] 出生点与 mesh origin 分离，重置使用指定 tile 的安全入口及批准的姿态/关节抖动；非法配置明确报错。\n- [ ] 验证 d=0/1、缓存一致性、放置变换、partial reset、注册与初始后端可加载性。\n- [ ] 同步运行入口及地形契约说明；该切片仅验收生成/重置行为，不宣称完整任务完成。\n\n## Contract references\n\n追踪：R1/R6/R12/R15；S1/S2/S24/S32/S35/S48/S66；ADR-001/002/007。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": []
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T02": {
+    "number": 6,
+    "title": "[SWAP T02] 箱体有效通过、落地确认与回合结束",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n箱体尝试仅在合法过门并完成有限落地确认后成功重置；绕行、基座碰撞和超时正确结束。\n\n## Acceptance criteria\n\n- [ ] 单一 ParkourAttemptState 原生 term；有序过门、回退清进度、高速跨门插值；重复读取/构造探测不重复推进。\n- [ ] 0.2 s 窗口、姿态/速度/支持脚阈值和目标平面接触归属遵循规格；非目标支持、悬空越界不成功。\n- [ ] 失败优先，terminated/truncated 可同时为真；手动/初始 reset 不伪造完成事件；边界信息不被清空缓冲别名污染。\n- [ ] 合成轨迹覆盖边界情形；有界后端检查接触过滤、缺失接触点、正常/失败落地及部分重置。更新成功判定局限说明。\n\n## Contract references\n\n追踪：R10/R13–R19；S23/S35/S50–S52/S58；ADR-003/007。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 5
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T03": {
+    "number": 7,
+    "title": "[SWAP T03] 沟壑跨越完整路径",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n沟壑生成、入口重置、双门通过和远端落地完成接入同一任务。\n\n## Acceptance criteria\n\n- [ ] 宽度/深度及地板侧壁碰撞、远端支持区与元数据一致；地板/侧壁支持不能计成功。\n- [ ] d=0/1、越门回退、绕行、远端有效落地有独立证据；同步地形用法。\n\n## Contract references\n\n追踪：R9/R15/R16；S37/S48–S52/S66。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 6
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T04": {
+    "number": 8,
+    "title": "[SWAP T04] 普通阶梯完整路径",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\nGo2 从入口沿单向阶梯到实际残余平台，按真实平台内缩区域确认完成。\n\n## Acceptance criteria\n\n- [ ] 原生计数/残余尺寸、额外平台升高、holes 两种跨度与单 +X 路线符合契约；默认 N=10、平台 1×4 m。\n- [ ] 参数变化重新计算门/支持/完成区，空区域拒绝；d=0/1 和有效/无效平台落地覆盖几何与任务链路。\n- [ ] 更新阶梯参数及实际平台关系说明。\n\n## Contract references\n\n追踪：R9/R15/R16；S38/S39/S59–S64/S66。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 6
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T05": {
+    "number": 9,
+    "title": "[SWAP T05] 倾斜阶梯与匹配镜像",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n倾斜踏面及其匹配镜像能生成、导入、重置并沿对应任务区域判定完成。\n\n## Acceptance criteria\n\n- [ ] 入口/平台保持水平；踏面剪切、首末边界变高及低侧闭合不被底面覆盖。\n- [ ] 同一 canonical sample 同步反射 geometry 与 regions；两种 holes、d=0/1、连接面与支持区域有验证。\n- [ ] 同步镜像使用及接缝验证记录；最终确定性评估入口在 T12 汇总。\n\n## Contract references\n\n追踪：R9 最终修订；S30/S41/S65/S66；ADR-001。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 8
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T06": {
+    "number": 10,
+    "title": "[SWAP T06] 侧坡及镜像完整路径",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n指定横坡及匹配镜像经过入口、坡面与远端落地区完成任务。\n\n## Acceptance criteria\n\n- [ ] 分段横坡过渡、网格间距 ≤0.05 m、三角形内部高度误差 ≤0.001 m；镜像复用 canonical sample。\n- [ ] 几何/门/支持面一致；d=0/1、合法通过及绕行有验证；同步坡面说明。\n\n## Contract references\n\n追踪：R9 最终修订；S30/S42/S49/S54/S66。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 6
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T07": {
+    "number": 11,
+    "title": "[SWAP T07] 随机岩石网格完整路径",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n可复现的正高度网格障碍及远端落地区接入有效通过判定。\n\n## Acceptance criteria\n\n- [ ] 2×2 m、10×10 cells、正高度样本，无额外中心平台或刻意缝隙；缓存/mesh/layout 使用同一抽样。\n- [ ] d=0/1、seed 重现、碰撞表面、双门与远端支持验证；同步随机地形说明。\n\n## Contract references\n\n追踪：R9/R15；S43/S44/S49/S66；ADR-001。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 6
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T08": {
+    "number": 12,
+    "title": "[SWAP T08] 共享本体历史与规范动作路径",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n环境输入动作按 canonical 顺序驱动关节，返回同顺序的共享 noisy 五帧历史与独立 commands。\n\n## Acceptance criteria\n\n- [ ] proprio [N,210] 的特征/时间顺序、噪声范围及共享样本复用精确；初始/部分重置重复同一首帧。\n- [ ] q_default+0.5*a、原始前次动作、无额外裁剪，明确坏输入失败；关节/足序映射一致。\n- [ ] 无 terminal-only 观测；done 行属于新回合。数值及原生生命周期检查并同步消费者选取说明。\n\n## Contract references\n\n追踪：R4/R17/R22/R23；S9–S11/S18/S58/S66。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 5
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T09": {
+    "number": 13,
+    "title": "[SWAP T09] 深度与高度扫描输出完整契约",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n环境返回经校准的深度、body/foot target 扫描及 critic 扫描，附有效性、时间和回合元数据。\n\n## Acceptance criteria\n\n- [ ] 深度 320×240、公制 image-plane、姿态轴向和有效 mask；已知平面检验校准。\n- [ ] 扫描分辨率/顺序/基座 yaw、捕获时参考 Z 和射线范围符合契约；no-hit 为零+无效。\n- [ ] 10 Hz target 原生持有、50 Hz critic；捕获 hook 内逐行复制，异步 partial reset 不改其他行样本。\n- [ ] low-rate bundle 捕获身份一致，初始时间/年龄、reset 有效性和返回 key/shape 完整；不另设调度器。同步所有权与借用缓冲说明。\n\n## Contract references\n\n追踪：R4/R24；S13–S16/S27/S35/S53/S66；ADR-005/007。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 5
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T10": {
+    "number": 14,
+    "title": "[SWAP T10] 实际动力学参数、干净状态与奖励",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n启动随机化真正应用到 Go2，privilege/AMP 返回实际干净状态，16 项奖励按批准公式作用于步进。\n\n## Acceptance criteria\n\n- [ ] 随机化范围/分布/生命周期、有效 P/D、质量/COM/共享材料回读正确，reset 不重抽 startup 参数；无 push。\n- [ ] privilege [N,273]、命名 AMP 和高度有效性符合契约；高度全无效贡献为零且不触发 reset。\n- [ ] S67 全部公式/权重、接触历史和 latest 区别、airtime 无低速门、dt 仅一次；动作一二阶差分从首步生效且部分重置隔离。\n- [ ] 数值 fixtures 与有限后端回读验证；同步论文/Go2 适配及输出文档。\n\n## Contract references\n\n追踪：R3/R6/R14/R21；S17/S19/S20/S25/S26/S31/S33/S55–S58/S67；ADR-006。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 13
+        },
+        {
+          "number": 12
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T11": {
+    "number": 15,
+    "title": "[SWAP T11] 独立课程驱动下一次尝试",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n结束尝试在原生 pre-reset 时更新地形成功率和速度跟踪统计，改变下一次分配/指令。\n\n## Acceptance criteria\n\n- [ ] 地形 last100/min20、0.8/0.3、逐级变更及最高级随机回低级；初始/手动 reset 不计数。\n- [ ] q 累计包含终止物理步、按实际时长归一；≥1 s 的20次等权批次含失败；速度增减/清批次/范围符合规格。\n- [ ] 同时结束按 env ID 排序；持久窗口跨 reset；只迁移结束行，迁移先于 spawn 与 command reset。\n- [ ] 最小 CommandTerm 用原生周期保持整回合固定，更新只影响后续尝试；合成 family fixtures 验证隔离，无需等待六类 mesh 全部实现。\n- [ ] 同步课程统计与日志语义。\n\n## Contract references\n\n追踪：R11/R17/R20；S5–S8/S21/S35；ADR-004/007。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 6
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  },
+  "T12": {
+    "number": 16,
+    "title": "[SWAP T12] 六类任务集成与确定性评估交付",
+    "body": "## Parent\n\n#4 — Add task for SWAP\n\n## What to build\n\n现有任务 ID 提供完整训练环境配置与固定 family/level/command 的确定性评估；所有契约形成可复核验收记录。\n\n## Acceptance criteria\n\n- [ ] 默认10×20分配、4/4/2/4/4/2列、初始0..5、family固定和普通/倾斜阶梯独立统计。\n- [ ] 评估关闭课程、噪声、随机动力学与抖动，保留行为定义；匹配镜像复用 canonical geometry。\n- [ ] 串行逐类及镜像有界运行，验证最大阶梯高度、射线覆盖、低侧接缝、接触归属、partial reset、完整 observation keys 和边界。\n- [ ] 核对原生 wrapper/timeout 兼容边界并记录，不实现 learner；所有 S67 验收行均有证据或明确失败。\n- [ ] 同步使用文档及 verification.md，记录版本、确切命令、退出码、结果与剩余风险；不得以训练性能替代正确性验收。\n\n## Contract references\n\n追踪：R1–R24 经最终修订；S34/S45–S47/S58/S66/S67；全部 ADR。\n\n遵循父任务已批准的最终规格与接口；研究中的历史建议不覆盖最终批准。初始后端组合为 Newton MJWarp + Newton Warp renderer。仿真前检查 RAM/VRAM，默认 headless、num_envs=2、串行有界运行。记录确切测试命令与结果。\n\n任务拆分与发布已批准；ready-for-agent 标签不替代仓库阶段审批，Implement/Verify 仍需明确授权。\n",
+    "parent": {
+      "number": 4
+    },
+    "blockedBy": {
+      "nodes": [
+        {
+          "number": 15
+        },
+        {
+          "number": 14
+        },
+        {
+          "number": 11
+        },
+        {
+          "number": 10
+        },
+        {
+          "number": 9
+        },
+        {
+          "number": 7
+        }
+      ]
+    },
+    "labels": {
+      "nodes": [
+        {
+          "name": "ready-for-agent"
+        }
+      ]
+    }
+  }
+}
