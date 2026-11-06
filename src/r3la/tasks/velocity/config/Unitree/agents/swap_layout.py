@@ -23,13 +23,13 @@ def make_swap_layout(*, obs, env) -> dict:
         matrix = torch.eye(len(indices))[indices]
         return matrix if signs is None else matrix * torch.tensor(signs)[:, None]
 
-    b, w, c = (
+    polar_transform, axial_transform, command_transform = (
         torch.diag(torch.tensor([1.0, -1.0, 1.0])),
         torch.diag(torch.tensor([-1.0, 1.0, -1.0])),
         torch.diag(torch.tensor([1.0, -1.0, -1.0])),
     )
-    a = permutation([3, 4, 5, 0, 1, 2, 9, 10, 11, 6, 7, 8], [-1, 1, 1] * 4)
-    u = a.abs()
+    joint_transform = permutation([3, 4, 5, 0, 1, 2, 9, 10, 11, 6, 7, 8], [-1, 1, 1] * 4)
+    unsigned_joint_transform = joint_transform.abs()
 
     def grid(nx: int, ny: int) -> torch.Tensor:
         return permutation(torch.arange(nx * ny).reshape(ny, nx).flip(0).flatten().tolist())
@@ -59,9 +59,21 @@ def make_swap_layout(*, obs, env) -> dict:
         "base/joint",
     )
     commands = field(["commands"], [3], ["vx", "vy", "yaw_rate"], ["m/s", "m/s", "rad/s"], "base")
-    p42 = torch.block_diag(w, b, a, a, a)
+    p42 = torch.block_diag(axial_transform, polar_transform, joint_transform, joint_transform, joint_transform)
     critic_p = torch.block_diag(
-        permutation([1, 0, 3, 2, 5, 4, 7, 6]), u, u, b, torch.eye(3), b, w, b, c, a, a, a, grid(17, 11)
+        permutation([1, 0, 3, 2, 5, 4, 7, 6]),
+        unsigned_joint_transform,
+        unsigned_joint_transform,
+        polar_transform,
+        torch.eye(3),
+        polar_transform,
+        axial_transform,
+        polar_transform,
+        command_transform,
+        joint_transform,
+        joint_transform,
+        joint_transform,
+        grid(17, 11),
     )
     critic_names = (
         names("contact", 8)
@@ -113,9 +125,12 @@ def make_swap_layout(*, obs, env) -> dict:
             raise ValueError("Go2 action order/scale/default offset differs from declared SWAP profile")
     return dict(
         schema_version=1,
-        actor=vector([proprio, commands], torch.block_diag(torch.kron(torch.eye(5), p42), c)),
+        actor=vector([proprio, commands], torch.block_diag(torch.kron(torch.eye(5), p42), command_transform)),
         critic=vector([field(["privilege"], [273], critic_names, critic_units, "base/joint")], critic_p),
-        wm_proprio=vector([latest_vector, commands, latest_joints], torch.block_diag(w, b, c, a, a)),
+        wm_proprio=vector(
+            [latest_vector, commands, latest_joints],
+            torch.block_diag(axial_transform, polar_transform, command_transform, joint_transform, joint_transform),
+        ),
         height=vector(heights, torch.block_diag(grid(22, 13), torch.kron(permutation([1, 0, 3, 2]), grid(5, 5)))),
         depth=dict(
             key=["target", "depth_image"],
@@ -127,7 +142,9 @@ def make_swap_layout(*, obs, env) -> dict:
             center=0,
             reflection_axis="width",
         ),
-        action=dict(dim=12, transform=a.tolist(), names=JOINT_NAMES, units="1", frames="joint_relative_target"),
+        action=dict(
+            dim=12, transform=joint_transform.tolist(), names=JOINT_NAMES, units="1", frames="joint_relative_target"
+        ),
     )
 
 
