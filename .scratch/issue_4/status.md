@@ -763,3 +763,10 @@ superseding the earlier instruction to keep it open. Removed the completed nativ
 camera one-off probe and verbose log; retained its structured evidence/report and
 all metadata removal verification logs. No production change since passed Verify.
 Delivery will publish the current swap branch and close #4 after successful push.
+
+## Delivery completed — 2026-11-06
+
+Implementation/evidence commit 091769f was pushed to origin/swap and remote SHA
+verified. Parent Issue #4 was closed as completed under the latest explicit user
+instruction; GitHub confirmed CLOSED at 2026-11-06T03:54:25Z. Verification results
+remain those recorded above. This delivery record is committed separately.
