@@ -1,0 +1,37 @@
+{
+  "commit": "cbd642388c995174b91838b79ea658fc62b54bca",
+  "stage": "Verify",
+  "approved_by": "user: 进入verify",
+  "regression": {
+    "passed": 169,
+    "warnings": 35,
+    "log": "performance-verify-pytest.log"
+  },
+  "equivalence": {
+    "cases": 180,
+    "result": "pass",
+    "log": "performance-verify-equivalence.log"
+  },
+  "native_functional_evidence": "reused after matching production source SHA256; original sensor and dynamics runs passed",
+  "compileall": "passed",
+  "whitespace": "passed",
+  "static_typechecking": "unavailable: neither pyright nor mypy installed",
+  "performance": {
+    "step_ms": 13.351020980044268,
+    "step_reduction_percent": 61.11381968749951,
+    "observation_ms": 8.243377037579194,
+    "observation_reduction_percent": 71.38103145793934,
+    "raw": "performance-verify.json",
+    "runner": "performance-verify-run.json"
+  },
+  "status": "passed",
+  "acceptance": {
+    "A1": "passed",
+    "A2": "passed",
+    "A3": "passed",
+    "A4": "passed",
+    "A5": "passed",
+    "A6": "passed",
+    "A7": "passed"
+  }
+}

@@ -1,8 +1,68 @@
 # Issue #4 — Performance implementation verification
 
-Status: **T13–T16 implemented; implementation validation passed.** User invoked
+Status: **Formal Verify passed**; latest results are in the section below.
+Historical implementation stage: T13–T16 implemented; implementation checks passed. User invoked
 implement for the approved tickets. No user acceptance or GitHub closure implied.
 The invoked implement skill authorizes review and local commit of this work.
+
+## Formal Verify — 2026-11-06
+
+Status: **PASS for approved performance follow-up criteria A1–A7.** User explicitly
+requested “进入verify”. Verified commit cbd642388c995174b91838b79ea658fc62b54bca;
+production tree was clean at entry. No production changes were needed.
+
+| Metric | Original baseline | Current commit Verify | Reduction |
+|---|---:|---:|---:|
+| Full step median window mean | 34.3336 ms | 13.3510 ms | 61.11% |
+| Complete observation median window mean | 28.8039 ms | 8.2434 ms | 71.38% |
+
+Both meet the unchanged70%-of-baseline thresholds. Benchmark used default
+unpatched mode on the actual committed source, four environments, seed7,
+zero residual actions, RGB+depth and10x20 six-family scene. Warmup50 steps;
+5x100-step windows per metric. Capture99/hold400/reset1 observations and5 explicit
+partial resets retained. Step windows 13.1896–13.6877ms;
+observation windows 8.2153–8.3527ms.
+
+Fresh executions:
+
+```sh
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -q
+.venv/bin/python .scratch/issue_4/check_fused_prototype.py
+.venv/bin/python -m compileall -q src tests
+git show --format= --check HEAD
+git diff --check
+timeout --kill-after=10s 240s .venv/bin/python .scratch/issue_4/benchmark_performance.py --result .scratch/issue_4/performance-verify.json --device cuda:0 --viz none
+```
+
+Regression **169 passed** (35 upstream warnings); independent original-baseline
+comparison **180 cases passed**. Compileall and whitespace checks passed.
+Source SHA256 checks match performance-production-source-hashes.json. Termination
+class matches baseline attempts class byte-for-byte; old file is absent. Prior
+passed native sensor/RGB/reset and dynamics/curriculum checks are reused because
+source is identical; they were not re-run in this Verify turn. Exact fresh logs:
+performance-verify-pytest.log, performance-verify-equivalence.log,
+performance-verify-benchmark.log. Raw benchmark and runner resource/exit evidence:
+performance-verify.json, performance-verify-run.json.
+
+RAM available before benchmark 18254440KiB, VRAM 7793MiB;
+serial, headless,240-second bound. IsaacLab still346c74fe722ad371a6c663e3b384b3d172966d11.
+No instability observed. Neither pyright nor mypy is installed; no static typecheck
+was run. This limitation is unchanged and not a substitute claim of type safety.
+
+| Acceptance | Evidence | Result |
+|---|---|---|
+| A1 snapshots/errors | fresh180-case baseline differential + sensor tests | Pass |
+| A2 selectors and reset | public selector regressions; unchanged native partial-reset evidence | Pass |
+| A3 regression/lazy termination | fresh169 tests, source/old-path check | Pass |
+| A4 native sensor and dynamics lifecycle | source hashes match previously passed native runs | Pass, evidence reused |
+| A5 committed production benchmark | fresh raw windows and runner exit0 | Pass |
+| A6 separate30% reductions | table above | Pass |
+| A7 reproducibility/limits | commands/logs/resources and unchanged limitations | Pass |
+
+Verify is complete; user subsequently authorized remote delivery and closure of
+completed performance sub-issues#17–#20, while retaining parent#4 open. Final
+Verify evidence is included in a follow-up delivery commit. The
+following implementation-stage results remain as historical evidence.
 
 ## Outcome
 

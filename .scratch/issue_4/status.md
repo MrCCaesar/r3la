@@ -1,6 +1,6 @@
 # Issue #4 — status and decision history
 
-Current status: T13–T16 implementation and checks completed;169 tests passed,180 baseline differential cases passed, native sensor/dynamics checks passed. Production step 13.7804ms (-59.86%), observations 8.2540ms (-71.34%). Both review axes have no remaining findings. Implementation committed locally under implement skill; user acceptance pending. See performance-verification.md.
+Current status: performance Verify completed and passed on commit cbd6423 following explicit user authorization. Fresh169 regression tests and180 differential cases passed; four-env step 13.3510ms (-61.11%), observations 8.2434ms (-71.38%). All approved A1–A7 criteria passed; native lifecycle evidence reused after exact source-hash checks. User requested publishing the verified work and closing T13–T16; Verify evidence is included in the delivery commit. See performance-verification.md.
 
 Previous delivery status: Verify authorized; latest checks passed, unified user acceptance pending. Ground-aligned side slope implemented (ADR-008 follow-up, cache revision 3): 159 tests passed; native slope check, compileall and diff check passed. User moved camera to (.35,0,.05) and confirmed self-occlusion resolved; former visibility blocker closed on user evidence. See verification.md.
 Approval: user requested “进入plan阶段”, then “继续”.
@@ -705,3 +705,11 @@ local Python/test caches. Retained requirements, design/history, ADRs, published
 ticket mappings, test scripts and verification logs as traceable evidence. Earlier
 references to publication helpers describe historical work; those helpers are no
 longer needed after publication. No GitHub edits or push authorized/performed.
+
+
+## Remote delivery authorization
+
+User requested pushing to remote and closing the corresponding sub-issues while
+keeping Issue#4 open. Scope: performance T13–T16, GitHub#17–#20. Push current swap
+branch with final Verify evidence, then close these four completed tasks. Parent
+Issue#4 and earlier task issues are not included in this closure operation.

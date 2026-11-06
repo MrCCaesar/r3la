@@ -1,0 +1,18 @@
+{
+  "command": [
+    "timeout",
+    "--kill-after=10s",
+    "240s",
+    "/home/sevnce-mr/r3la/.venv/bin/python",
+    ".scratch/issue_4/benchmark_performance.py",
+    "--result",
+    ".scratch/issue_4/performance-verify.json",
+    "--device",
+    "cuda:0",
+    "--viz",
+    "none"
+  ],
+  "exit_code": 0,
+  "ram_kib": 18254440,
+  "vram_mib": 7793
+}
