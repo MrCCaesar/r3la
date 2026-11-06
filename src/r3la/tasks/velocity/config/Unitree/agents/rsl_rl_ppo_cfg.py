@@ -7,9 +7,11 @@ from isaaclab.utils import configclass
 
 from isaaclab_rl.rsl_rl import RslRlMLPModelCfg, RslRlOnPolicyRunnerCfg, RslRlPpoAlgorithmCfg
 
+from .swap_layout import swap_reference_config
+
 
 @configclass
-class UnitreeGo2SWAPPPORunnerCfg(RslRlOnPolicyRunnerCfg):
+class _UnitreeGo2PPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 24
     max_iterations = 1500
     save_interval = 50
@@ -43,7 +45,27 @@ class UnitreeGo2SWAPPPORunnerCfg(RslRlOnPolicyRunnerCfg):
 
 
 @configclass
-class UnitreeGo2FlatPPORunnerCfg(UnitreeGo2SWAPPPORunnerCfg):
+class UnitreeGo2SWAPPPORunnerCfg(_UnitreeGo2PPORunnerCfg):
+    """Approved SWAP functional profile, retaining the existing OnPolicyRunner."""
+
+    obs_groups = {"actor": ["actor", "wm_h"], "critic": ["critic", "wm_h"]}
+    actor = dict(
+        class_name="SEMLPModel",
+        hidden_dims=[128, 128],
+        activation="elu",
+        distribution_cfg=dict(class_name="SymmetricGaussianDistribution", init_std=1.0),
+    )
+    critic = dict(class_name="SEMLPModel", hidden_dims=[128, 128], activation="elu")
+    clip_actions = None
+    swap: dict = swap_reference_config()
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.algorithm.class_name = "SWAPPPO"
+
+
+@configclass
+class UnitreeGo2FlatPPORunnerCfg(_UnitreeGo2PPORunnerCfg):
     def __post_init__(self):
         super().__post_init__()
 
