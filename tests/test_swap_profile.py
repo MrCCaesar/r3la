@@ -52,3 +52,17 @@ def test_config_roundtrip_and_latest_proprio_selection():
     assert current[6:9].tolist() == [1.0, 2.0, 3.0]
     assert current[-1] == 197
     assert layout.height.dim == 386
+
+
+def test_hydra_configuration_override_roundtrip():
+    """Keep task overrides serializable through the public configuration entrypoint."""
+    from isaaclab_tasks.utils import resolve_task_config
+
+    import r3la.tasks  # noqa: F401  # register task configurations
+
+    _, cfg = resolve_task_config(
+        "R3la-SWAP-Parkour-UnitreeGo2", "rsl_rl_cfg_entry_point", overrides=["agent.swap.world_model.k=4"]
+    )
+    actual = to_dict(cfg)
+    assert actual["swap"]["world_model"]["k"] == 4
+    assert json.loads(json.dumps(actual["swap"])) == actual["swap"]
